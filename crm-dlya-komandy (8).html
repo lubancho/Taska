@@ -1,0 +1,1416 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CRM для команды из четырёх</title>
+
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: фиолетовая боковая навигация по блокам, белые карточки — как в «Тестовом задании Канаевой» */
+:root{--bg:#f3f0ff;--bg2:#e6e0ff;--side:#4536a8;--glass:#ffffff;--glass2:#f7f5ff;--bd:#d6cdf7;--bd2:#a898fb;
+--fg:#1a1340;--text:#2b2459;--muted:#4f4884;--dim:#6b6499;--vio:#7c63ff;--lil:#5a40e0;--ok:#16924b;--bad:#d83a50;--warn:#c98f00;
+--pill-bad:#ff7d8b;--pill-bad-fg:#fff;--pill-warn:#fcd34d;--pill-warn-fg:#4a3500;--pill-ok:#4ade80;--pill-ok-fg:#073b1d;
+--glow1:rgba(165,148,255,.28);--glow2:rgba(165,148,255,.18);--tint:rgba(124,99,255,.12);--shadow:rgba(70,50,170,.10);
+--font:Manrope,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+aside{--fg:#fff;--muted:#e1dcff;--dim:#c9c2f5;--glass:rgba(255,255,255,.1);--glass2:rgba(255,255,255,.16);--bd:rgba(255,255,255,.2);--bd2:rgba(255,255,255,.5);--lil:#e0d9ff;color:#fff}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;min-height:100vh;color:var(--fg);font:15px/1.6 var(--font);-webkit-font-smoothing:antialiased;
+background:radial-gradient(900px 500px at 95% -10%,var(--glow1),transparent 60%),radial-gradient(700px 500px at 15% 115%,var(--glow2),transparent 60%),linear-gradient(160deg,var(--bg) 0%,var(--bg2) 100%);background-color:var(--bg)}
+svg{stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.app{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh}
+aside{position:sticky;top:0;height:100vh;padding:28px 16px;display:flex;flex-direction:column;gap:4px;background:var(--side);overflow-y:auto}
+.brand{display:flex;align-items:center;gap:12px;padding:0 10px 26px}
+.logo{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;border:1.5px solid var(--lil);color:var(--lil);font-weight:800;font-size:12px;flex:none}
+.brand .t{font-weight:800;font-size:16.5px;line-height:1.2}
+.brand .sub{font-size:12px;color:var(--muted)}
+.nav{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border-radius:12px;cursor:pointer;color:var(--muted);font-weight:600;font-size:14.5px;white-space:nowrap;border:1px solid transparent;transition:.15s}
+.nav .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;border:1px solid var(--bd);background:var(--glass);flex:none;font-size:12px;font-weight:800}
+.nav svg{width:16px;height:16px;stroke-width:1.8}
+.nav:hover{color:var(--fg);background:var(--glass)}
+.nav.on{color:var(--fg);background:linear-gradient(90deg,rgba(255,255,255,.2),rgba(255,255,255,.03));border-color:var(--bd2)}
+.nav.on .ic{border-color:var(--bd2);color:var(--lil)}
+.nav:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+.foot{margin-top:auto;padding:14px 12px 0;font-size:12.5px;color:var(--dim);border-top:1px solid var(--bd);display:grid;gap:3px;line-height:1.45}
+.foot b{color:var(--fg);font-weight:700;font-size:13.5px}
+main{padding-block:44px 72px;padding-left:max(52px,env(safe-area-inset-left,0px));padding-right:max(52px,env(safe-area-inset-right,0px));max-width:1280px;width:100%;min-width:0}
+.view{display:none;animation:fade .3s ease}.view.on{display:block}
+@keyframes fade{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.view{animation:none}}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+h1{font-size:42px;font-weight:800;letter-spacing:-.03em;line-height:1.08;margin:0 0 16px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--lil)}
+.lead{font-size:17.5px;color:var(--text);max-width:46rem;margin:0}
+.lead b{color:var(--lil)}
+.rule{width:64px;height:2px;background:var(--vio);border-radius:2px;margin:22px 0 28px}
+.glass{background:var(--glass);border:1px solid var(--bd);border-radius:18px;box-shadow:0 10px 30px var(--shadow),0 1px 2px var(--shadow)}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;display:inline-block}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:14px}
+.stat{all:unset;box-sizing:border-box;display:block;padding:20px}
+.stat.glass{background:var(--glass);border:1px solid var(--bd);border-radius:18px;box-shadow:0 10px 30px var(--shadow),0 1px 2px var(--shadow)}
+button.stat{cursor:pointer;transition:.15s}button.stat:hover{border-color:var(--bd2);background:var(--glass2)}
+button.stat:focus-visible{outline:2px solid var(--lil)}
+.stat .l{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px}
+.stat .v{font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:10px 0 2px;font-variant-numeric:tabular-nums}
+.stat .s{font-size:12.5px;color:var(--dim)}
+.box{padding:22px 24px;margin-bottom:14px}
+.l2{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--lil);margin-bottom:12px}
+.key{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.key li{display:flex;gap:12px;color:var(--text)}
+.key li .dot{margin-top:9px}
+.key b{color:var(--fg)}
+.cta{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;width:100%;padding:18px 22px;margin-bottom:14px;cursor:pointer;font-weight:700}
+.cta:hover{border-color:var(--bd2);background:var(--glass2)} .cta span{color:var(--lil)}
+.cta:focus-visible{outline:2px solid var(--lil)}
+.sec{font-size:20px;font-weight:800;margin:34px 0 12px;display:flex;align-items:center;gap:10px}
+.sec .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;border:1px solid var(--bd2);color:var(--lil);background:var(--tint);flex:none}
+.sec svg{width:15px;height:15px;stroke-width:2}
+.note{font-size:13.5px;color:var(--muted);margin:12px 0 0}
+
+/* as is / to be */
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.col h4{margin:0 0 10px;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.col.no h4{color:var(--bad)} .col.yes h4{color:var(--ok)}
+.col ul{margin:0;padding-left:20px;color:var(--text)} .col li{margin:6px 0}
+.roles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.role{padding:18px}
+.role small{display:block;font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--lil);margin-bottom:4px}
+.role b{display:block;color:var(--fg);margin-bottom:6px}
+.role span{color:var(--text);font-size:13.5px;display:block}
+
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.fl{padding:14px 16px;position:relative}
+.fl small{display:block;font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--lil)}
+.fl b{display:block;color:var(--fg);font-size:15px;line-height:1.3;margin:2px 0 4px}
+.fl span{color:var(--text);font-size:13px;line-height:1.45;display:block}
+
+/* service cards */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chip{all:unset;cursor:pointer;font-size:13.5px;font-weight:700;padding:7px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--glass);color:var(--muted)}
+.chip.on{border-color:var(--lil);color:var(--lil);background:var(--tint)}
+.chip:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+.svc{padding:22px 24px;margin-bottom:14px;position:relative;overflow:hidden}
+.svc::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:4px;border-radius:3px;background:var(--vio)}
+.svc.best{border-color:var(--bd2);box-shadow:0 0 0 1px var(--bd2),0 10px 30px var(--shadow)}
+.svc.ok::before{background:var(--ok)}.svc.mid::before{background:var(--warn)}.svc.low::before{background:var(--bad)}
+.svc-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.svc-h h3{margin:0;font-size:19px;font-weight:800}
+.pr{font-size:13px;font-weight:800;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;flex:none;background:var(--lil)}
+.st{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:999px}
+.ok .st{background:var(--pill-ok);color:var(--pill-ok-fg)}.mid .st{background:var(--pill-warn);color:var(--pill-warn-fg)}.low .st{background:var(--pill-bad);color:var(--pill-bad-fg)}
+.best .st{background:var(--lil);color:#fff}
+.svc .what{color:var(--text);margin:0 0 14px;max-width:50rem}
+.facts4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.f4{background:var(--tint);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;min-width:0}
+.f4 small{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.f4 b{display:block;color:var(--fg);font-size:15px;line-height:1.3;font-variant-numeric:tabular-nums}
+.f4 span{font-size:12.5px;color:var(--dim)}
+.facts6{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.verdict{display:flex;gap:12px;align-items:flex-start;background:var(--tint);border:1px solid var(--bd2);border-radius:12px;padding:10px 14px;margin-top:16px;color:var(--fg);font-weight:600}
+.verdict small{font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--lil);white-space:nowrap;padding-top:2px}
+.srcline{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;margin-top:12px;font-size:13px}
+.srcline small{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.srcline a,.tbl a{color:var(--lil);font-weight:600;overflow-wrap:anywhere}
+.src a{overflow-wrap:anywhere}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700;color:var(--fg)}
+tr.hlrow th,tr.hlrow td{background:var(--tint)}
+.grid3{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:20px}
+.aibox{margin-top:18px}
+.aibox h4{margin:0 0 8px;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--lil)}
+.aiwrap{overflow-x:auto;border:1px solid var(--bd);border-radius:12px}
+table.ai{min-width:640px;font-size:13.5px}
+table.ai th,table.ai td{padding:10px 12px}
+table.ai thead th{background:var(--tint)}
+table.ai tbody th{width:22%}
+table.ai td.cnd{color:var(--muted);width:30%}
+.grid3 .col h4{color:var(--lil)}.grid3 .col.yes h4{color:var(--ok)}.grid3 .col.no h4{color:var(--bad)}
+.grid3 .col li{font-size:14px;margin:5px 0}
+.col{min-width:0}
+
+/* compare table */
+.tbl{overflow-x:auto;padding:6px 0}
+table{border-collapse:collapse;width:100%;min-width:780px;font-size:14px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--bd);vertical-align:top;color:var(--text)}
+thead th{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+th.hl,td.hl{background:var(--tint)}
+thead th.hl{color:var(--lil)}
+tbody th{font-weight:700;color:var(--fg)}
+tbody tr:last-child td,tbody tr:last-child th{border-bottom:0}
+.m{display:inline-flex;align-items:center;gap:7px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted);margin-bottom:12px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+
+/* cost bars */
+.bars{display:grid;gap:14px}
+.bar{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 9.5rem;align-items:center;gap:14px;font-size:14px}
+.bar .n{font-weight:700;color:var(--fg)}
+.track{height:12px;background:var(--bg2);border-radius:6px;position:relative;overflow:hidden}
+.fill{position:absolute;top:0;bottom:0;left:0;border-radius:6px;background:var(--vio)}
+.fill.best{background:var(--lil)}
+.range{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(45deg,var(--vio) 0 4px,transparent 4px 8px);opacity:.6}
+.bar .v{text-align:right;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.axis{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 9.5rem;gap:14px;font-size:11.5px;color:var(--dim);margin-top:4px}
+.axis div{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+
+/* plan */
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:3rem minmax(0,1fr);gap:14px;padding:14px 0;border-top:1px solid var(--bd)}
+.tl li:first-child{border-top:0;padding-top:0}
+.tl .num{font-weight:800;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:var(--lil);border:1px solid var(--bd2);background:var(--tint);font-size:13px}
+.tl b{display:block;color:var(--fg)}
+.tl span{display:block;color:var(--text);font-size:14.5px}
+.phases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.phases .box{margin:0}
+.kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.kpi .stat .v{font-size:28px}
+.src ul{margin:0;padding-left:20px;color:var(--text);font-size:14px}
+.src li{margin:4px 0}
+.src a{color:var(--lil)}
+
+@media (max-width:1080px){.facts6{grid-template-columns:repeat(2,minmax(0,1fr))}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.roles,.kpi{grid-template-columns:repeat(2,minmax(0,1fr))}.facts4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:980px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3,.phases{grid-template-columns:1fr}}
+/* интерактив и мобильная версия */
+.app{background:linear-gradient(90deg,var(--side) 0 270px,transparent 270px)}
+.foot .fl0{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.foot span{user-select:all}
+.sign{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 20px;padding:18px 22px;margin-top:40px}
+.sign small{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.sign b,.sign span{color:var(--fg);font-weight:700;overflow-wrap:anywhere;user-select:all}
+.seg{display:inline-flex;padding:4px;border-radius:12px;background:var(--bg2);margin-bottom:16px}
+.segb{all:unset;cursor:pointer;padding:7px 16px;border-radius:9px;font-weight:700;font-size:13.5px;color:var(--muted)}
+.segb.on{background:var(--glass);color:var(--lil);box-shadow:0 2px 6px var(--shadow)}
+.segb:focus-visible,.bar:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+button.bar{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr) 9.5rem;align-items:center;gap:14px;font-size:14px;padding:6px 8px;margin:0 -8px;border-radius:10px;transition:background .15s}
+button.bar:hover{background:var(--tint)}
+#axis{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+.fill,.range{transition:width .35s ease,left .35s ease}
+th.go{cursor:pointer;color:var(--lil)!important;text-decoration:underline;text-decoration-color:var(--bd2);text-underline-offset:3px}
+.prog{display:flex;align-items:center;gap:20px;padding:16px 20px;margin-bottom:14px;flex-wrap:wrap}
+.prog b{display:block;color:var(--fg)}.prog span{font-size:13px;color:var(--muted)}
+.pbar{flex:1 1 220px;height:10px;border-radius:6px;background:var(--bg2);overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--ok);border-radius:6px;transition:width .3s}
+li.step{cursor:pointer;border-radius:12px;transition:background .15s}
+li.step:hover{background:var(--tint)}
+li.step:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+li.step.done .num{background:var(--ok);border-color:var(--ok);color:#fff;font-size:0}
+li.step.done .num::before{content:"✓";font-size:14px}
+li.step.done b{text-decoration:line-through;text-decoration-color:var(--ok);color:var(--muted)}
+.ch-row:hover .will{border-color:var(--ok)}
+.tab,.cond,.stat.glass,.svc{transition:border-color .15s,background .15s,transform .15s}
+.cond:hover{transform:translateY(-2px)}
+@media (max-width:1000px){.app{background:linear-gradient(90deg,var(--side) 0 220px,transparent 220px)}.sign{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:820px){button.bar{grid-template-columns:minmax(0,1fr) auto}button.bar .track{grid-column:1/-1;grid-row:2}}
+@media (max-width:640px){
+ .app{background:linear-gradient(90deg,var(--side) 0 60px,transparent 60px)}
+ .facts6{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .f4 b{font-size:14px}
+ .sign{grid-template-columns:1fr}
+ table.stack{min-width:0!important}
+ table.stack thead{display:none}
+ table.stack,table.stack tbody,table.stack tr,table.stack th,table.stack td{display:block;width:auto!important}
+ table.stack tr{padding:12px 14px;border-bottom:1px solid var(--bd)}
+ table.stack tr:last-child{border-bottom:0}
+ table.stack tbody th{padding:0 0 6px;border:0;font-size:15px}
+ table.stack td{padding:4px 0;border:0;display:flex;justify-content:space-between;gap:12px;text-align:right;background:none!important}
+ table.stack td::before{content:attr(data-label);color:var(--muted);font-size:12.5px;text-align:left;flex:none;max-width:45%}
+ table.ai.stack td{display:block;text-align:left}
+ table.ai.stack td::before{display:block;max-width:none;margin-bottom:2px;font-weight:700}
+ .tbl{padding:0}.aiwrap{overflow:visible}
+}
+.msgbox{margin-top:18px}
+.msgbox h4{margin:0 0 8px;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--lil)}
+.msggrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.mg{border:1px solid var(--bd);border-radius:12px;padding:12px 14px;background:var(--glass)}
+.mg small{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.mg span{font-size:14px;color:var(--text)}
+@media (max-width:820px){.msggrid{grid-template-columns:1fr}}
+/* навигация и тема */
+.nav{position:relative;transition:color .2s,background .2s,border-color .2s,transform .15s}
+.nav:hover{transform:translateX(3px)}
+.nav:hover .ic{border-color:#fff;color:#fff;background:rgba(255,255,255,.18)}
+.nav.on{background:#fff;color:var(--side);border-color:#fff;box-shadow:0 8px 20px rgba(20,10,80,.25)}
+.nav.on .ic{background:var(--side);border-color:var(--side);color:#fff}
+.nav.on::after{content:"";position:absolute;right:-16px;top:50%;width:6px;height:24px;margin-top:-12px;border-radius:4px 0 0 4px;background:#fcd34d}
+.nav .ic{transition:.2s}
+.nav.ctc{display:none}
+.fit li .fill,.bars .fill{transition:width .4s ease}
+.f4,.mg,.pm .col,.cond,.was,.will{transition:transform .15s,box-shadow .15s,border-color .15s}
+.f4:hover,.mg:hover,.pm .col:hover{transform:translateY(-2px);box-shadow:0 8px 18px var(--shadow);border-color:var(--bd2)}
+.tab:hover{transform:translateY(-1px)}
+table tbody tr{transition:background .15s}
+table tbody tr:hover th,table tbody tr:hover td{background:var(--tint)}
+.m{align-items:flex-start!important}.m .dot{margin-top:7px}
+.mgh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.mgh small{margin:0!important}
+.mg em{font-style:normal;font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px}
+.mg.g{border-left:4px solid var(--ok)}.mg.g em{background:var(--pill-ok);color:var(--pill-ok-fg)}
+.mg.w{border-left:4px solid var(--warn)}.mg.w em{background:var(--pill-warn);color:var(--pill-warn-fg)}
+.mg.b{border-left:4px solid var(--bad)}.mg.b em{background:var(--pill-bad);color:var(--pill-bad-fg)}
+@media (max-width:1000px){.nav.on::after{right:-10px}}
+@media (max-width:640px){
+ .facts6{grid-template-columns:1fr!important}
+ .nav.on::after{display:none}
+ .nav:hover{transform:none}
+ .nav.ctc{display:flex;margin-top:auto}
+ .foot{display:none!important}
+ .foot.pop{display:grid!important;position:fixed;left:68px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;background:var(--side);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:14px 16px;box-shadow:0 12px 30px rgba(0,0,0,.3);margin:0}
+}
+@media (prefers-reduced-motion:reduce){.nav,.f4,.mg,.pm .col,.tab{transition:none}.nav:hover,.f4:hover,.mg:hover,.pm .col:hover,.tab:hover{transform:none}}
+/* подбор и калькулятор */
+.hint{font-size:13.5px;color:var(--muted);margin-bottom:10px}
+.prios{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.prio{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--glass);color:var(--text);font-weight:700;font-size:13.5px;transition:.15s}
+.prio i{width:16px;height:16px;border-radius:5px;border:1.5px solid var(--bd2);display:grid;place-items:center;font-style:normal;font-size:11px}
+.prio.on{background:var(--lil);border-color:var(--lil);color:#fff}
+.prio.on i{background:#fff;border-color:#fff;color:var(--lil)}.prio.on i::before{content:"✓"}
+.prio:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+.fit{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.fit li{display:grid;grid-template-columns:30px minmax(0,140px) minmax(0,1fr) 3.5rem;gap:12px;align-items:center;padding:8px 10px;border-radius:12px;cursor:pointer;transition:background .15s}
+.fit li:hover{background:var(--tint)}.fit li.top{background:var(--tint);border:1px solid var(--bd2)}
+.fit li:focus-visible{outline:2px solid var(--lil)}
+.fit li.empty{display:block;cursor:default;color:var(--muted)}
+.fit .pr{width:30px;height:30px}.fit b{color:var(--fg)}
+.fit .pc{text-align:right;font-weight:800;font-variant-numeric:tabular-nums;color:var(--fg)}
+.fit .track,.bars .track{height:12px}
+.calc-ctl{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 24px;margin-bottom:18px}
+.rng{flex:1 1 260px}
+.rng label{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.rngrow{display:flex;align-items:center;gap:14px}
+.rngrow input{flex:1;accent-color:var(--lil);height:24px}
+.rngrow output{min-width:3.2rem;text-align:center;font-size:22px;font-weight:800;color:var(--lil);font-variant-numeric:tabular-nums;background:var(--tint);border-radius:10px;padding:2px 8px}
+.calc-ctl .seg{margin:0}
+.bars button.bar .n{display:flex;flex-direction:column;gap:1px;min-width:0}
+.bars button.bar .n small{font-size:12.5px;color:var(--muted);font-weight:500}
+.bars button.bar .v{display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+.bars button.bar .v small{font-size:12px;color:var(--muted);font-weight:500}
+.cheap{font-style:normal;align-self:flex-start;margin-top:3px;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--pill-ok);color:var(--pill-ok-fg)}
+@media (max-width:640px){.fit li{grid-template-columns:30px minmax(0,1fr) 3rem}.fit li .track{grid-column:2/-1;grid-row:2}}
+/* сервисы: вкладки */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.tab{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:12px;border:1px solid var(--bd);background:var(--glass);color:var(--text);font-weight:700;font-size:14px}
+.tab .tn{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:12px;background:var(--tint);color:var(--lil)}
+.tab:hover{border-color:var(--bd2)}
+.tab.on{background:var(--lil);border-color:var(--lil);color:#fff}.tab.on .tn{background:rgba(255,255,255,.22);color:#fff}
+.tab:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+.svc{display:none}.svc.on{display:block}
+.svc .what{font-size:15.5px}
+.svc .verdict{margin:0 0 18px}
+.pm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.pm .col{background:var(--glass2);border:1px solid var(--bd);border-radius:14px;padding:14px 16px}
+.pm .col h4{margin:0 0 6px}.pm .col.yes h4{color:var(--ok)}.pm .col.no h4{color:var(--bad)}
+.pm ul{margin:0;padding-left:18px;color:var(--text)}.pm li{margin:5px 0;font-size:14.5px}
+@media (max-width:640px){.pm{grid-template-columns:1fr}}
+.srcgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.srcgrid .box{margin:0}
+.srcgrid .l2 em{font-style:normal;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--tint);color:var(--lil)}
+@media (max-width:900px){.srcgrid{grid-template-columns:1fr}}
+.srcl{list-style:none;margin:0;padding:0!important;display:grid;gap:6px}
+.srcl a{display:flex;flex-direction:column;padding:10px 12px;border-radius:12px;border:1px solid var(--bd);background:var(--glass2);color:var(--fg)!important;font-weight:700;text-decoration:none;transition:border-color .15s,transform .15s}
+.srcl a:hover{border-color:var(--bd2);transform:translateX(3px)}
+.srcl a span{font-size:12px;font-weight:500;color:var(--lil)}
+.subtabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.stab{all:unset;box-sizing:border-box;cursor:pointer;padding:12px 16px;border-radius:14px;border:1px solid var(--bd);background:var(--glass);display:flex;flex-direction:column;gap:2px;transition:.15s}
+.stab b{color:var(--fg);font-size:15px}.stab span{font-size:12.5px;color:var(--muted)}
+.stab:hover{border-color:var(--bd2);transform:translateY(-1px)}
+.stab.on{background:var(--lil);border-color:var(--lil);box-shadow:0 8px 20px var(--shadow)}
+.stab.on b,.stab.on span{color:#fff}
+.stab:focus-visible,.gb:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+.sub{display:none}.sub.on{display:block;animation:fade .25s ease}
+.sub .box{margin-bottom:12px}
+.seg.grp{margin-bottom:12px;flex-wrap:wrap}
+.gb{all:unset;cursor:pointer;padding:7px 14px;border-radius:9px;font-weight:700;font-size:13.5px;color:var(--muted)}
+.gb.on{background:var(--glass);color:var(--lil);box-shadow:0 2px 6px var(--shadow)}
+#cmp tr.off{display:none}
+@media (max-width:760px){.subtabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* путь-трекер */
+.prog{display:flex;align-items:center;gap:18px 24px;flex-wrap:wrap;padding:16px 20px;margin-bottom:22px}
+.pstat{display:flex;gap:18px}
+.pstat div{display:flex;flex-direction:column}
+.pstat b{font-size:24px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.pstat div:nth-child(1) b{color:var(--ok)}.pstat div:nth-child(2) b{color:var(--warn)}.pstat div:nth-child(3) b{color:var(--muted)}
+.pstat span{font-size:12px;color:var(--muted)}
+.pmain{flex:1 1 260px;display:flex;flex-direction:column;gap:6px}
+.pmain span{font-size:13px;color:var(--muted)}
+.pmain .pbar{flex:none;height:10px}
+.preset{all:unset;cursor:pointer;font-size:13px;font-weight:700;color:var(--lil);border:1px solid var(--bd2);border-radius:10px;padding:6px 12px;background:var(--tint)}
+.preset:hover{background:var(--lil);color:#fff}.preset:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+.path{list-style:none;margin:0 0 10px;padding:0;position:relative}
+.path::before{content:"";position:absolute;left:21px;top:10px;bottom:30px;width:3px;border-radius:2px;background:repeating-linear-gradient(to bottom,var(--bd2) 0 8px,transparent 8px 14px)}
+.ph{position:relative;display:flex;align-items:center;gap:12px;padding:6px 0 12px}
+.ph .phn{width:45px;height:16px;display:grid;place-items:center;position:relative}
+.ph .phn::after{content:"";width:16px;height:16px;border-radius:50%;background:var(--lil);box-shadow:0 0 0 5px var(--bg2)}
+.ph b{font-size:15px;color:var(--fg)}
+.ph em{white-space:nowrap;flex:none;font-style:normal;font-size:12px;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--bg2);color:var(--lil)}
+.pst{position:relative;display:grid;grid-template-columns:45px minmax(0,1fr);gap:14px;padding:0 0 14px;cursor:pointer}
+.pst:focus-visible{outline:none}.pst:focus-visible .pcard{outline:2px solid var(--lil);outline-offset:2px}
+.node{position:relative;z-index:1;width:45px;height:45px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;background:var(--glass);border:2px solid var(--bd2);color:var(--lil);transition:.2s}
+.pcard{background:var(--glass);border:1px solid var(--bd);border-radius:16px;padding:14px 18px;box-shadow:0 6px 18px var(--shadow);transition:transform .15s,border-color .15s,box-shadow .15s;max-width:46rem}
+.pst:hover .pcard{transform:translateX(4px);border-color:var(--bd2)}
+.ptop{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.ptop b{color:var(--fg);font-size:15.5px}
+.pcard p{margin:4px 0 6px;color:var(--text);font-size:14.5px}
+.pcard small{font-size:12px;font-weight:700;color:var(--muted)}
+.pcard small::before{content:"⏱ "}
+.pst .st{font-size:11.5px;font-weight:800;padding:3px 10px;border-radius:999px;background:var(--bg2);color:var(--muted)}
+.pst.doing .node{background:var(--pill-warn);border-color:var(--warn);color:var(--pill-warn-fg)}
+.pst.doing .pcard{border-left:4px solid var(--warn)}
+.pst.doing .st{background:var(--pill-warn);color:var(--pill-warn-fg)}
+.pst.done .node{background:var(--ok);border-color:var(--ok);color:#fff}
+.pst.done .pcard{opacity:.75}
+.pst.done .ptop b{text-decoration:line-through;text-decoration-color:var(--ok)}
+.pst.done .st{background:var(--pill-ok);color:var(--pill-ok-fg)}
+.pst.cur .node{box-shadow:0 0 0 6px var(--tint);animation:pulse 2s ease-in-out infinite}
+.pst.cur .pcard{border-color:var(--bd2)}
+@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(124,99,255,.08)}}
+@media (prefers-reduced-motion:reduce){.pst.cur .node{animation:none}}
+@media (max-width:640px){.path::before{left:17px}.node{width:37px;height:37px;font-size:13px}.pst{grid-template-columns:37px minmax(0,1fr);gap:10px}.ph .phn{width:37px}}
+/* сравнение: матрица */
+.mxctl{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px;padding:14px 20px;margin-bottom:12px}
+.mxctl .rng{flex:1 1 240px}.mxctl .seg{margin:0}
+.lg{display:flex;gap:14px;font-size:13px;color:var(--muted);align-items:center;padding-bottom:6px}
+.lg span{display:inline-flex;align-items:center;gap:5px}
+.ico{display:inline-block;width:11px;height:11px;border-radius:50%;flex:none;vertical-align:-1px}
+.ico.g{background:var(--ok)}.ico.w{background:linear-gradient(90deg,var(--warn) 50%,transparent 50%);box-shadow:inset 0 0 0 2px var(--warn)}.ico.b{box-shadow:inset 0 0 0 2px var(--bad)}
+.mx{overflow-x:auto;padding:0}
+.mxt{border-collapse:separate;border-spacing:0;width:100%;min-width:860px;font-size:13.5px;table-layout:fixed}
+.mxt th,.mxt td{padding:8px 12px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:middle}
+.mxt thead th{text-transform:none;letter-spacing:0;font-size:13.5px;color:var(--text);position:sticky;top:0;background:var(--glass);z-index:2;vertical-align:top;padding-top:16px;padding-bottom:12px}
+.mxt .corner{width:21%;font-size:11.5px!important;letter-spacing:.08em!important;text-transform:uppercase;color:var(--muted);vertical-align:bottom}
+.svh{display:table-cell}
+.svh .svn{all:unset;cursor:pointer;display:block;font-weight:800;font-size:15px;color:var(--fg)}
+.svh .svn:hover{color:var(--lil);text-decoration:underline}
+.svh .svn:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+.svh small{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.svh .pz{display:block;font-size:20px;font-weight:800;color:var(--fg);margin-top:6px;font-variant-numeric:tabular-nums}
+.svh .badge{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--lil);color:#fff;margin-bottom:4px}
+.mxt .rec{background:var(--tint)}
+.mxt thead .rec{background:linear-gradient(var(--tint),var(--tint)),var(--glass);border-top:3px solid var(--lil)}
+.mxt tr.grp th{background:var(--bg2);color:var(--lil);font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px}
+.mxt .crit{font-weight:700;color:var(--fg)}
+.mxt td{color:var(--text)}
+.mxt td>span{margin-left:6px}
+.mxt td{white-space:normal}
+.mxt td{display:table-cell}.mxt td .ico{margin-right:2px}
+.mxt tbody tr:not(.grp):hover th,.mxt tbody tr:not(.grp):hover td{background:var(--tint)}
+.mxt tbody tr:last-child th,.mxt tbody tr:last-child td{border-bottom:0}
+.mxpick{display:none;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.mxb{all:unset;cursor:pointer;padding:7px 12px;border-radius:10px;border:1px solid var(--bd);background:var(--glass);font-weight:700;font-size:13px;color:var(--text)}
+.mxb.on{background:var(--lil);border-color:var(--lil);color:#fff}
+@media (max-width:640px){
+ .mxpick{display:flex}
+ .mxt{min-width:0;table-layout:auto}
+ .mxt .msel{width:58%}
+ .mxt [data-c]:not(.msel){display:none}
+ .mxt .corner{width:42%}
+ .mxt td,.mxt th{padding:8px 10px}
+ .lg{width:100%}
+}
+/* сравнение: светофор */
+.hm{padding:6px 0;overflow:hidden}
+.hrow{display:grid;grid-template-columns:minmax(180px,1.7fr) repeat(6,minmax(0,1fr)) minmax(120px,1.1fr);align-items:stretch}
+.hgrp{padding:10px 0 0}
+.hgrp .gl{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;text-align:center;padding:4px 6px;margin:0 6px;border-radius:8px}
+.gl1{grid-column:2/span 3;background:var(--tint);color:var(--lil)}
+.gl2{grid-column:5/span 3;background:var(--bg2);color:var(--muted)}
+.hhead{border-bottom:1px solid var(--bd)}
+.hhead>div{padding:10px 8px;font-size:12.5px;font-weight:700;color:var(--muted);text-align:center;line-height:1.25}
+.hhead .hc0{text-align:left;padding-left:20px}
+.hhead .hp0{text-align:right;padding-right:20px}
+.hsv{border-bottom:1px solid var(--bd);transition:background .15s}
+.hsv:last-child{border-bottom:0}
+.hsv:hover{background:var(--glass2)}
+.hsv.rec{background:var(--tint);box-shadow:inset 4px 0 0 var(--lil)}
+.hname{padding:12px 8px 12px 20px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.hn{all:unset;cursor:pointer;font-weight:800;font-size:15.5px;color:var(--fg)}
+.hn:hover{color:var(--lil);text-decoration:underline}
+.hn:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+.hname small{font-size:12.5px;color:var(--muted);line-height:1.35}
+.hname .badge{align-self:flex-start;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--lil);color:#fff;margin-bottom:2px}
+.hcell{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;margin:6px 4px;padding:8px 4px;border-radius:12px;text-align:center;font-size:12.5px;font-weight:700;line-height:1.2;transition:transform .12s,box-shadow .12s}
+.hcell .ico{width:16px;height:16px}
+.hcell.g{background:#e3f6ea;color:#0f6b38}
+.hcell.w{background:#fff3d1;color:#7a5600}
+.hcell.b{background:#fde8eb;color:#a62a3c}
+.hcell:hover{transform:translateY(-2px);box-shadow:0 6px 14px var(--shadow)}
+.hcell.sel{box-shadow:0 0 0 2px var(--lil),0 6px 14px var(--shadow)}
+.hcell:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+.hkm{display:none}
+.hprice{padding:12px 20px 12px 8px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;text-align:right}
+.hprice b{font-size:19px;font-weight:800;color:var(--fg);font-variant-numeric:tabular-nums}
+.hprice small{font-size:11.5px;color:var(--muted);line-height:1.3}
+.hdet{position:relative;margin-top:12px;padding:16px 22px;border-left:5px solid var(--bd2)}
+.hdet.g{border-left-color:var(--ok)}.hdet.w{border-left-color:var(--warn)}.hdet.b{border-left-color:var(--bad)}
+.hd-top{display:flex;align-items:center;gap:10px}
+.hd-svc{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hd-pill{font-size:11px;font-weight:800;padding:2px 10px;border-radius:999px}
+.hd-pill.g{background:var(--pill-ok);color:var(--pill-ok-fg)}.hd-pill.w{background:var(--pill-warn);color:var(--pill-warn-fg)}.hd-pill.b{background:var(--pill-bad);color:var(--pill-bad-fg)}
+.hdet h3{margin:4px 0;font-size:18px;color:var(--fg)}
+.hdet p{margin:0;color:var(--text);max-width:52rem}
+.hclose{display:none}
+@media (max-width:1000px){.hrow{grid-template-columns:minmax(140px,1.4fr) repeat(6,minmax(0,1fr)) minmax(100px,1fr)}.hcell span{font-size:11.5px}}
+@media (max-width:820px){
+ .hgrp,.hhead{display:none}
+ .hm{padding:0;background:none;border:0;box-shadow:none;display:grid;gap:10px}
+ .hsv{grid-template-columns:repeat(3,minmax(0,1fr));background:var(--glass);border:1px solid var(--bd);border-radius:16px;padding:6px 8px 8px;box-shadow:0 6px 18px var(--shadow)}
+ .hsv:last-child{border-bottom:1px solid var(--bd)}
+ .hsv.rec{background:var(--glass);border-color:var(--lil);box-shadow:0 0 0 1px var(--lil),0 6px 18px var(--shadow)}
+ .hname{grid-column:1/span 2;grid-row:1;padding:8px 6px}
+ .hprice{grid-column:3;grid-row:1;padding:8px 6px}
+ .hprice b{font-size:16px}
+ .hkm{display:block;font-size:10.5px;font-weight:700;color:inherit;opacity:.75}
+ .hcell{margin:3px;padding:8px 4px}
+ .hclose{display:grid;place-items:center;position:absolute;top:8px;right:10px;width:32px;height:32px;border:0;border-radius:10px;background:var(--bg2);color:var(--fg);font-size:20px;cursor:pointer}
+ .hdet{display:none;position:fixed;left:68px;right:max(8px,env(safe-area-inset-right,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:30;margin:0;box-shadow:0 -6px 30px rgba(30,20,90,.25);padding-right:48px}
+ .hdet.open{display:block;animation:fade .2s ease}
+}
+@media (min-width:821px) and (max-width:1000px){.hdet{left:auto}}
+@media (max-width:640px){.hprice small{display:none}}
+/* сравнение v3 */
+.hrow{grid-template-columns:minmax(170px,1.6fr) repeat(8,minmax(0,1fr)) 140px!important}
+.gl1{grid-column:2/span 5!important}.gl2{grid-column:7/span 3!important}
+.hhead .hp0{text-align:left!important;padding-left:14px!important;padding-right:16px!important}
+.hcell{background:var(--glass)!important;color:var(--fg)!important;border:1px solid var(--bd);margin:7px 3px!important;padding:8px 3px!important;gap:6px!important}
+.hcell .hv{display:grid;place-items:center;width:26px;height:26px;border-radius:50%}
+.hcell.g .hv{background:#e3f6ea}.hcell.w .hv{background:#fff3d1}.hcell.b .hv{background:#fde8eb}
+.hcell .ico{width:12px!important;height:12px!important}
+.hcell .ht{font-size:12px;font-weight:700;color:var(--text)}
+.hcell.b .ht{color:var(--muted);font-weight:600}
+.hcell:hover,.hcell.sel{border-color:var(--bd2);background:var(--glass2)!important}
+.hcell.sel{box-shadow:0 0 0 2px var(--lil)!important}
+.hprice{align-items:flex-start!important;text-align:left!important;padding:12px 16px 12px 14px!important;border-left:1px solid var(--bd)}
+.hprice b{white-space:nowrap}
+.hprice small{font-size:12px!important}
+.htip{position:fixed;z-index:45;width:300px;max-width:calc(100vw - 16px);background:var(--fg);color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 14px 34px rgba(20,10,60,.35);pointer-events:auto;animation:fadein .15s ease}
+.htip[hidden]{display:none}
+.ht-top{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.ht-top b{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#cfc8ff}
+.ht-k{font-weight:800;font-size:15px;margin-bottom:4px}
+.htip p{margin:0;font-size:13px;line-height:1.45;color:#ece9ff}
+.hdet{display:none!important}
+@media (max-width:1100px){.hrow{grid-template-columns:minmax(140px,1.3fr) repeat(8,minmax(0,1fr)) 120px!important}.hk0{font-size:11.5px!important}}
+@media (max-width:820px){.hsv{grid-template-columns:repeat(4,minmax(0,1fr))!important}.hname{grid-column:1/span 3!important}.hprice{grid-column:4!important;border-left:0}.hcell .ht{font-size:11px}}
+@media (max-width:480px){.hsv{grid-template-columns:repeat(2,minmax(0,1fr))!important}.hname{grid-column:1/-1!important}.hprice{grid-column:1/-1!important;grid-row:2!important;flex-direction:row!important;gap:8px;align-items:baseline!important;padding:0 6px 6px!important}}
+/* сравнение: сервисы колонками */
+.tt{padding:0;overflow:hidden}
+.ttr{display:grid;grid-template-columns:minmax(200px,1.25fr) repeat(5,minmax(0,1fr));border-bottom:1px solid var(--bd)}
+.ttr:last-child{border-bottom:0}
+.tthead{align-items:stretch;border-bottom:2px solid var(--bd)}
+.tth{padding:16px 12px 14px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.tth.rec{background:var(--tint);box-shadow:inset 0 3px 0 var(--lil)}
+.tth .badge{align-self:flex-start;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--lil);color:#fff;margin-bottom:2px}
+.tth .hn{all:unset;cursor:pointer;font-weight:800;font-size:16px;color:var(--fg)}
+.tth .hn:hover{color:var(--lil);text-decoration:underline}
+.tth .hn:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+.tth .vd{font-size:12.5px;color:var(--muted);line-height:1.35;flex:1}
+.tth .pz{font-size:22px;font-weight:800;color:var(--fg);margin-top:6px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tth .tf{font-size:12px;color:var(--muted)}
+.ttg{padding:8px 20px;background:var(--bg2);color:var(--lil);font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--bd)}
+.ttk{padding:12px 12px 12px 20px;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.ttk b{font-size:14.5px;color:var(--fg)}
+.ttk small{font-size:12.5px;color:var(--muted)}
+.tcl{all:unset;box-sizing:border-box;cursor:pointer;display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-start!important;gap:8px!important;margin:6px!important;padding:10px 8px!important;border-radius:12px;border:1px solid transparent;background:transparent!important;text-align:left!important;transition:background .15s,border-color .15s}
+.tcl.rec{background:var(--tint)!important}
+.tcl:hover,.tcl.sel{border-color:var(--bd2);background:var(--glass)!important;box-shadow:0 4px 12px var(--shadow)}
+.tcl.sel{box-shadow:0 0 0 2px var(--lil)!important}
+.tcl .hv{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%}
+.tcl.g .hv{background:#e3f6ea}.tcl.w .hv{background:#fff3d1}.tcl.b .hv{background:#fde8eb}
+.tcl .ico{width:12px!important;height:12px!important}
+.tcl{min-width:0}.tcl .ht{font-size:13.5px;font-weight:700;color:var(--fg);min-width:0}
+.tcl.b .ht{color:var(--muted);font-weight:600}
+.tcl:focus-visible{outline:2px solid var(--lil);outline-offset:1px}
+.ttpick{display:none;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.ttb{all:unset;cursor:pointer;padding:8px 13px;border-radius:10px;border:1px solid var(--bd);background:var(--glass);font-weight:700;font-size:13.5px;color:var(--text)}
+.ttb.on{background:var(--lil);border-color:var(--lil);color:#fff}
+.ttb:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+@media (max-width:1320px){.tcl{flex-direction:column!important;align-items:center;justify-content:center!important;text-align:center!important;gap:4px!important;padding:8px 4px!important}}
+@media (max-width:1050px){.ttr{grid-template-columns:minmax(150px,1fr) repeat(5,minmax(0,1fr))}.tcl{flex-direction:column!important;align-items:center;justify-content:center!important;text-align:center!important;gap:4px!important;padding:8px 4px!important}.tcl .ht{font-size:12.5px}.tth .pz{font-size:19px}}
+@media (max-width:760px){
+ .ttpick{display:flex}
+ .ttr{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
+ #hm [data-c]:not(.csel){display:none!important}
+ .tcl{flex-direction:row!important;justify-content:flex-start!important;text-align:left!important}
+ .tth .vd{min-height:0}
+ .ttk{padding:10px 8px 10px 14px}.ttg{padding:8px 14px}
+}
+/* шапка сравнения: компактная и закреплённая */
+.tt{overflow:visible!important}
+.tthead{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--glass);border-radius:18px 18px 0 0;box-shadow:0 6px 14px -8px rgba(40,25,120,.25)}
+.ttc0{padding:14px 12px 14px 20px;display:flex;flex-direction:column;justify-content:center}
+.ttc0 b{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ttc0 small{font-size:12.5px;color:var(--muted)}
+.tth{padding:12px 12px!important;gap:4px!important;justify-content:center}
+.tth.rec{border-radius:0;background:var(--tint)}
+.tthead .tth:last-child{border-radius:0 18px 0 0}
+.tth-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tth .badge{margin:0!important}
+.tth-pr{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.tth .pz{margin:0!important;font-size:20px!important}
+.tth .tf{font-size:12px}
+.ttv{border-bottom:0}
+.tvd{margin:6px;padding:10px 12px;border-radius:12px;font-size:13.5px;font-weight:600;color:var(--fg);line-height:1.4}
+.tvd.rec{background:var(--tint)}
+.tt>.ttr:last-child>div:first-child{border-radius:0 0 0 18px}
+@media (max-width:760px){.ttc0 small{display:none}}
+/* перед решением: план-график */
+.gn{padding:22px 24px 18px;margin-bottom:16px}
+.gn-h{display:flex;justify-content:space-between;align-items:center;gap:12px 20px;flex-wrap:wrap;margin-bottom:16px}
+.gn-h>div:first-child b{display:block;font-size:18px;color:var(--fg)}
+.gn-h>div:first-child span{font-size:13.5px;color:var(--muted)}
+.gn-prog{display:flex;align-items:center;gap:12px;flex:0 1 380px}
+.gn-prog span{font-size:13.5px;font-weight:700;color:var(--fg);white-space:nowrap}
+.gn-prog .pbar{flex:1;height:8px}
+.gn-grid{display:grid;gap:0}
+.gr{display:grid;grid-template-columns:220px minmax(0,1fr);align-items:stretch;min-height:52px;border-bottom:1px solid var(--bd)}
+.gr-h{display:grid;grid-template-columns:220px repeat(4,minmax(0,1fr));min-height:0;border-bottom:2px solid var(--bd)}
+.gl0{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);align-self:end;padding:0 0 8px}
+.gw{padding:0 0 6px;border-left:1px solid var(--bd)}
+.gw b{display:block;font-size:13px;color:var(--fg);padding-left:8px}
+.gd{display:grid;grid-template-columns:repeat(5,1fr);font-size:11px;color:var(--dim);text-align:center}
+.gl{display:grid;grid-template-columns:28px minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;align-items:center;align-content:center;padding:8px 10px 8px 0}
+.gn-n{grid-row:1/3;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:12.5px;font-weight:800;background:var(--tint);color:var(--lil)}
+.gl b{font-size:14.5px;color:var(--fg);line-height:1.25}
+.gl small{font-size:12px;color:var(--muted)}
+.gt{position:relative;display:grid;grid-template-columns:repeat(20,minmax(0,1fr));grid-template-rows:1fr;align-items:center}
+.gc{grid-row:1;align-self:stretch;border-left:1px dashed rgba(124,99,255,.12)}
+.gc.wk{border-left:1px solid var(--bd)}
+.gt>.gc:nth-child(1){grid-column:1}.gt>.gc:nth-child(2){grid-column:2}.gt>.gc:nth-child(3){grid-column:3}.gt>.gc:nth-child(4){grid-column:4}.gt>.gc:nth-child(5){grid-column:5}.gt>.gc:nth-child(6){grid-column:6}.gt>.gc:nth-child(7){grid-column:7}.gt>.gc:nth-child(8){grid-column:8}.gt>.gc:nth-child(9){grid-column:9}.gt>.gc:nth-child(10){grid-column:10}.gt>.gc:nth-child(11){grid-column:11}.gt>.gc:nth-child(12){grid-column:12}.gt>.gc:nth-child(13){grid-column:13}.gt>.gc:nth-child(14){grid-column:14}.gt>.gc:nth-child(15){grid-column:15}.gt>.gc:nth-child(16){grid-column:16}.gt>.gc:nth-child(17){grid-column:17}.gt>.gc:nth-child(18){grid-column:18}.gt>.gc:nth-child(19){grid-column:19}.gt>.gc:nth-child(20){grid-column:20}
+.gbar{all:unset;box-sizing:border-box;cursor:pointer;grid-row:1;z-index:1;height:34px;margin:0 2px;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 10px;font-size:12.5px;font-weight:800;color:#fff;overflow:hidden;white-space:nowrap;box-shadow:0 4px 10px rgba(40,25,120,.18);transition:transform .15s,box-shadow .15s,background .2s}
+.gbar .gbt{overflow:hidden;text-overflow:ellipsis}
+.gbar .gbs{flex:none;font-size:11.5px}
+.gbar.short{justify-content:center;padding:0 4px}.gbar.short .gbt{display:none}
+.gw .ws{display:none}
+.gbar.s0{background:#7c63ff}.gbar.s1{background:#4536a8}.gbar.s2{background:#1f1a5c}
+.gbar.doing{background:repeating-linear-gradient(135deg,#e9a800 0 10px,#f2bd2c 10px 20px);color:#3d2a00}
+.gbar.done{background:var(--ok)}
+.gbar:hover{transform:translateY(-2px);box-shadow:0 8px 16px rgba(40,25,120,.28)}
+.gbar.cur{outline:3px solid #fcd34d;outline-offset:2px}
+.gbar:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.gr-f{border-bottom:0;min-height:46px}
+.gms{grid-row:1;z-index:1;display:flex;align-items:center;gap:8px;justify-self:start;padding-left:4px}
+.gms .dia{width:16px;height:16px;background:var(--ok);transform:rotate(45deg);border-radius:3px;box-shadow:0 0 0 4px #e3f6ea}
+.gms b{font-size:13px;color:var(--ok);white-space:nowrap}
+.gn-lg{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;font-size:12.5px;color:var(--muted)}
+.gn-lg span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:18px;height:10px;border-radius:4px;display:inline-block}
+.sw.s0{background:#7c63ff}.sw.s1{background:#4536a8}.sw.s2{background:#1f1a5c}.sw.doing{background:repeating-linear-gradient(135deg,#e9a800 0 4px,#f2bd2c 4px 8px)}.sw.done{background:var(--ok)}
+.finish{display:grid;grid-template-columns:1fr;gap:16px 24px;align-items:center;padding:20px 24px;border-left:5px solid var(--ok)}
+.fin-h{display:flex;gap:12px;align-items:flex-start}
+.flag{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#e3f6ea;color:var(--ok)}
+.flag svg{width:22px;height:22px;stroke-width:2}
+.fin-h b{display:block;font-size:16px;color:var(--fg)}
+.fin-h span{font-size:13px;color:var(--muted)}
+.fin-l{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.fin-l div{padding:12px 14px;border-radius:12px;background:var(--glass2);border:1px solid var(--bd)}
+.fin-l b{display:block;font-size:24px;font-weight:800;color:var(--ok);font-variant-numeric:tabular-nums}
+.fin-l span{font-size:13px;color:var(--text);line-height:1.35}
+.gpop{position:fixed;z-index:45;width:340px;max-width:calc(100vw - 16px);background:var(--glass);border:1px solid var(--bd2);border-radius:16px;padding:16px 18px;box-shadow:0 18px 40px rgba(30,20,90,.28);animation:fadein .15s ease}
+.gpop[hidden]{display:none}
+.gpop h3{margin:4px 0;font-size:19px;color:var(--fg)}
+.gpop p{margin:0 0 6px;font-size:14.5px;color:var(--text)}
+.gpop .pd-st{margin-top:10px}
+.gp-x{all:unset;cursor:pointer;position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--bg2);color:var(--fg);font-size:18px}
+.gp-x:focus-visible{outline:2px solid var(--lil)}
+@media (max-width:1100px){.finish{grid-template-columns:1fr}.fin-l{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:820px){.gr,.gr-h{grid-template-columns:120px minmax(0,1fr)}.gr-h{grid-template-columns:120px repeat(4,minmax(0,1fr))}.gl small,.gd{display:none}.gl b{font-size:12.5px}.gbar .gbt{display:none}.gbar{justify-content:center;padding:0 2px;height:26px;margin:0 1px}.gw b{font-size:11px;padding-left:4px}.gw .wf{display:none}.gw .ws{display:inline}.gn{padding:16px 12px}.gms b{display:none}}
+@media (max-width:640px){.gr,.gr-h{grid-template-columns:96px minmax(0,1fr)}.gr-h{grid-template-columns:96px repeat(4,minmax(0,1fr))}.gl{grid-template-columns:22px minmax(0,1fr);column-gap:6px}.gn-n{width:22px;height:22px;font-size:11px}.gl b{font-size:11.5px}.fin-l{grid-template-columns:1fr 1fr}.fin-l b{font-size:20px}.gn-prog{flex:1 1 100%}}
+@media (prefers-reduced-motion:reduce){.gbar{transition:none}}
+/* перед решением: крупнее */
+.plan2{grid-template-columns:minmax(0,1fr) 300px!important;gap:18px!important}
+.plan2>*{min-width:0}
+.pcard2{padding:24px 26px 26px!important}
+.p2head>div:first-child b{font-size:18px!important}
+.p2head>div:first-child span{font-size:14px!important}
+.p2cnt{font-size:13.5px!important}.p2cnt b{font-size:19px!important}
+.pcard2 .stg{padding:10px 10px!important;margin:0 5px 18px!important}
+.pcard2 .stg b{font-size:14.5px!important}.pcard2 .stg em{font-size:12.5px!important}
+.pcard2 .nd .dot2{width:52px!important;height:52px!important;font-size:17px!important}
+.pcard2 .nodes::before{top:32px!important}
+.pcard2 .nd .nt{font-size:13.5px!important}
+.pdet2{padding:22px 24px!important;margin-top:18px!important}
+.pdet2 h3{font-size:24px!important}
+.pdet2 p{font-size:16px!important;line-height:1.55}
+.pd-meta{font-size:12.5px!important}.pd-dur{font-size:14px!important}
+.pd-st button{padding:9px 14px!important;font-size:14px!important}
+.pd-nav button{height:40px!important;font-size:14px!important;padding:0 14px!important}
+.metr{padding:22px!important}
+.metr .l2{font-size:13px!important}
+.mt-sub{font-size:14px!important}
+.mtl{gap:10px!important}
+.mtl li{display:flex!important;flex-direction:column;align-items:flex-start!important;gap:2px!important;padding:14px 16px!important}
+.mtl b{font-size:26px!important}
+.mtl span{font-size:14px!important}
+@media (max-width:1250px){.plan2{grid-template-columns:1fr!important}.mtl{grid-template-columns:repeat(4,minmax(0,1fr))}.mtl{display:grid}}
+@media (max-width:900px){.mtl{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media (max-width:640px){.pcard2{padding:16px 12px!important}.pcard2 .nd .dot2{width:32px!important;height:32px!important;font-size:13px!important}.pcard2 .nodes::before{top:22px!important}.pcard2 .stg{margin:0 2px 10px!important;padding:5px!important}.pcard2 .stg b{font-size:11px!important}.pcard2 .stg em{font-size:10.5px!important;white-space:normal}.p2cnt{gap:8px!important}.pd-st button{padding:8px 9px!important;font-size:13px!important}.pd-nav{flex-wrap:wrap}.pdet2 h3{font-size:20px!important}.pdet2 p{font-size:15px!important}.mtl{grid-template-columns:1fr 1fr!important}.mtl b{font-size:22px!important}}
+/* перед решением: горизонтальный путь */
+.proad{padding:18px 20px 14px;margin-bottom:12px;overflow:visible}
+.stages,.nodes{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));min-width:640px}
+.stg{display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 8px;margin:0 4px 14px;border-radius:10px;background:var(--bg2)}
+.stg b{font-size:13px;color:var(--fg)}.stg em{font-style:normal;font-size:11.5px;font-weight:800;color:var(--lil);white-space:nowrap}
+.nodes{position:relative}
+.nodes::before{content:"";position:absolute;left:6.25%;right:6.25%;top:21px;height:3px;background:repeating-linear-gradient(90deg,var(--bd2) 0 8px,transparent 8px 14px)}
+.nd{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 4px 4px;text-align:center}
+.nd .dot2{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:15px;background:var(--glass);border:2px solid var(--bd2);color:var(--lil);transition:.2s;position:relative;z-index:1}
+.nd .nt{font-size:12px;font-weight:700;color:var(--text);line-height:1.25}
+.nd:hover .dot2{transform:scale(1.08)}
+.nd:focus-visible .dot2{outline:2px solid var(--lil);outline-offset:3px}
+.nd.doing .dot2{background:var(--pill-warn);border-color:var(--warn);color:var(--pill-warn-fg)}
+.nd.done .dot2{background:var(--ok);border-color:var(--ok);color:#fff}
+.nd.cur .dot2{box-shadow:0 0 0 6px var(--tint),0 0 0 8px var(--bd2)}
+.nd.cur .nt{color:var(--lil)}
+.pdet{display:flex;gap:16px 24px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;padding:18px 22px;margin-bottom:12px;border-left:5px solid var(--bd2)}
+.pdet.doing{border-left-color:var(--warn)}.pdet.done{border-left-color:var(--ok)}
+.pd-main{flex:1 1 320px;min-width:0}
+.pd-meta{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pdet h3{margin:4px 0;font-size:20px;color:var(--fg)}
+.pdet p{margin:0 0 6px;color:var(--text);max-width:44rem}
+.pd-dur{font-size:13px;font-weight:700;color:var(--muted)}
+.pd-side{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.pd-st{display:inline-flex;padding:4px;border-radius:12px;background:var(--bg2)}
+.pd-st button{all:unset;cursor:pointer;padding:7px 12px;border-radius:9px;font-weight:700;font-size:13px;color:var(--muted)}
+.pd-st button.on[data-v2="0"]{background:var(--glass);color:var(--fg);box-shadow:0 2px 6px var(--shadow)}
+.pd-st button.on[data-v2="1"]{background:var(--pill-warn);color:var(--pill-warn-fg)}
+.pd-st button.on[data-v2="2"]{background:var(--ok);color:#fff}
+.pd-nav{display:flex;gap:6px}
+.pd-nav button{all:unset;cursor:pointer;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;border:1px solid var(--bd2);color:var(--lil);font-weight:800;background:var(--glass)}
+.pd-nav button:disabled{opacity:.35;cursor:default}
+.pd-st button:focus-visible,.pd-nav button:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+.kpi2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kpi2 div{background:var(--glass);border:1px solid var(--bd);border-radius:14px;padding:12px 14px}
+.kpi2 b{display:block;font-size:22px;font-weight:800;color:var(--lil);font-variant-numeric:tabular-nums}
+.kpi2 span{font-size:12.5px;color:var(--muted)}
+.prog{margin-bottom:12px!important}
+@media (max-width:900px){.kpi2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){
+ .stages,.nodes{min-width:0}
+ .stg{flex-direction:column;gap:0;margin:0 2px 10px;padding:4px}.stg b{font-size:11px}.stg em{font-size:10.5px}
+ .proad{padding:14px 10px 12px}
+ .nd .nt{display:none}.nd .dot2{width:30px;height:30px;font-size:12px}.nodes::before{top:14px}
+ .nd.cur .dot2{box-shadow:0 0 0 3px var(--tint),0 0 0 5px var(--bd2)}
+ .pd-side{align-items:flex-start;width:100%}
+ .kpi2{grid-template-columns:1fr 1fr}
+}
+/* перед решением v2 */
+.plan2{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:14px;align-items:start}
+.pcard2{padding:18px 20px 20px}
+.p2head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px 16px;flex-wrap:wrap;margin-bottom:10px}
+.p2head>div:first-child b{display:block;font-size:16px;color:var(--fg)}
+.p2head>div:first-child span{font-size:13px;color:var(--muted)}
+.p2cnt{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.p2cnt b{font-size:16px;font-variant-numeric:tabular-nums}
+.c-done b{color:var(--ok)}.c-doing b{color:var(--warn)}.c-todo b{color:var(--muted)}
+.p2bar{height:6px;margin-bottom:16px}
+.pcard2 .stages,.pcard2 .nodes{min-width:0}
+.nd{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:6px 2px 8px;border-radius:12px;text-align:center;transition:background .15s}
+.nd:hover{background:var(--tint)}
+.nd:hover .dot2{transform:none}
+.nd .dot2{width:40px;height:40px}
+.nd.cur{background:var(--tint)}
+.nd.cur .dot2{box-shadow:none;border-width:3px;border-color:var(--lil)}
+.nd.cur.todo .dot2{background:var(--lil);color:#fff}
+.nd.cur .nt{color:var(--lil)}
+.nd:focus-visible{outline:2px solid var(--lil);outline-offset:1px}
+.nodes::before{top:26px}
+.pdet2{position:relative;display:flex;flex-direction:column;gap:12px;margin-top:14px;padding:16px 18px;border-radius:14px;background:var(--glass2);border:2px solid var(--lil);transition:border-color .2s}
+.pdet2.doing{border-color:var(--warn)}.pdet2.done{border-color:var(--ok)}
+.notch{position:absolute;top:-11px;width:18px;height:18px;background:var(--glass2);border-left:2px solid var(--lil);border-top:2px solid var(--lil);transform:rotate(45deg);transition:left .25s ease}
+.pdet2.doing .notch{border-color:var(--warn)}.pdet2.done .notch{border-color:var(--ok)}
+.pdet2 h3{margin:4px 0;font-size:19px;color:var(--fg)}
+.pdet2 p{margin:0 0 6px;color:var(--text)}
+.pd-lbl{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pd-side{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding-top:12px;border-top:1px solid var(--bd)}
+.pd-side .pd-nav{margin-left:auto}
+.pd-nav button{width:auto;padding:0 12px;font-size:13px}
+.metr{padding:18px}
+.mt-sub{margin:0 0 12px;font-size:13px;color:var(--muted)}
+.mtl{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.mtl li{display:grid;grid-template-columns:4.6rem minmax(0,1fr);gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--glass2);border:1px solid var(--bd)}
+.mtl b{font-size:18px;font-weight:800;color:var(--lil);font-variant-numeric:tabular-nums}
+.mtl span{font-size:13px;color:var(--text);line-height:1.35}
+@media (max-width:1150px){.plan2{grid-template-columns:1fr}.mtl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){
+ .pcard2{padding:14px 10px 12px}
+ .nd .nt{display:none}.nd .dot2{width:30px;height:30px}.nodes::before{top:21px}
+ .mtl{grid-template-columns:1fr}
+ .pd-side .pd-nav{margin-left:0}
+ .pd-st button{padding:7px 10px}
+ .p2cnt .preset{margin-left:auto}
+}
+.pdet2 .pd-main{flex:none}
+.pdet2 .pd-side{flex-direction:row;align-items:center;justify-content:flex-start}
+/* ИИ-помощник */
+.aifab{all:unset;box-sizing:border-box;cursor:pointer;position:fixed;right:max(20px,env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:40;display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:999px;color:#fff;font-weight:800;font-size:14.5px;background:linear-gradient(120deg,#5a40e0,#8b75ff);box-shadow:0 10px 26px rgba(90,64,224,.45);transition:transform .15s}
+.aifab svg{width:20px;height:20px;fill:#fff;stroke:none}
+.aifab:hover{transform:translateY(-2px)}
+.aifab:focus-visible{outline:3px solid #fcd34d;outline-offset:3px}
+.aifab.pulse{animation:fabp 2s ease-out 3}
+@keyframes fabp{0%{box-shadow:0 10px 26px rgba(90,64,224,.45),0 0 0 0 rgba(124,99,255,.5)}70%{box-shadow:0 10px 26px rgba(90,64,224,.45),0 0 0 18px rgba(124,99,255,0)}100%{box-shadow:0 10px 26px rgba(90,64,224,.45),0 0 0 0 rgba(124,99,255,0)}}
+.aifab.open{opacity:0;pointer-events:none}
+.aipanel{position:fixed;right:max(20px,env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:41;width:380px;max-height:min(620px,calc(100vh - 40px));display:flex;flex-direction:column;background:var(--glass);border:1px solid var(--bd2);border-radius:20px;box-shadow:0 20px 50px rgba(30,20,90,.3);overflow:hidden;animation:fade .2s ease}
+.aipanel[hidden]{display:none!important}
+.ai-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:14px 16px;background:var(--side);color:#fff}
+.ai-h b{display:block;font-size:15px}.ai-h span{font-size:12px;color:#e1dcff}
+.ai-x{all:unset;cursor:pointer;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:20px;background:rgba(255,255,255,.14)}
+.ai-x:focus-visible{outline:2px solid #fcd34d}
+.ai-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;min-height:120px}
+.msg{max-width:88%;padding:9px 12px;border-radius:14px;font-size:14px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.bot{align-self:flex-start;background:var(--bg2);color:var(--fg);border-bottom-left-radius:4px}
+.msg.me{align-self:flex-end;background:var(--lil);color:#fff;border-bottom-right-radius:4px}
+.msg.wait{color:var(--muted);animation:fadein .8s ease-in-out infinite alternate}
+.ai-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px}
+.chipq{all:unset;cursor:pointer;font-size:12.5px;font-weight:700;padding:6px 11px;border-radius:999px;border:1px solid var(--bd2);color:var(--lil);background:var(--tint)}
+.chipq:hover{background:var(--lil);color:#fff}
+.chipq:focus-visible{outline:2px solid var(--lil);outline-offset:2px}
+.ai-form{display:flex;gap:8px;padding:10px 12px 12px;border-top:1px solid var(--bd)}
+.ai-form[hidden]{display:none}
+.ai-form input{flex:1;min-width:0;border:1px solid var(--bd2);border-radius:12px;padding:10px 12px;font:14px var(--font);color:var(--fg);background:var(--glass2)}
+.ai-form input:focus{outline:2px solid var(--lil);outline-offset:0}
+.ai-form button{all:unset;cursor:pointer;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--lil);color:#fff;font-weight:800;font-size:18px}
+.ai-form button:disabled{opacity:.5;cursor:progress}
+.hcell.flash{animation:flash .5s ease 3}
+@keyframes flash{50%{box-shadow:0 0 0 4px #fcd34d}}
+@media (max-width:640px){
+ .aifab{padding:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px))}.aifab span{display:none}
+ .aipanel{left:68px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:auto;max-height:calc(100vh - 80px)}
+}
+/* итоги: новая раскладка */
+.dec2{border-radius:22px;overflow:hidden;background:var(--side);color:#fff;box-shadow:0 18px 40px var(--shadow);margin-bottom:16px}
+.dec2-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px 24px;flex-wrap:wrap;padding:28px 30px 24px}
+.dec2-txt{display:flex;flex-direction:column;gap:10px;max-width:40rem}
+.dec2-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;background:rgba(255,255,255,.08);border-top:1px solid rgba(255,255,255,.18)}
+.dec2-nums div{padding:16px 24px;border-left:1px solid rgba(255,255,255,.18);display:flex;flex-direction:column}
+.dec2-nums div:first-child{border-left:0}
+.dec2-nums b{font-size:24px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.dec2-nums span{font-size:13px;color:#e1dcff}
+.dec2-go{all:unset;cursor:pointer;align-self:center;margin:0 20px;padding:10px 16px;border-radius:12px;background:#fff;color:var(--side);font-weight:800;font-size:14px;white-space:nowrap;transition:transform .15s}
+.dec2-go:hover{transform:translateX(3px)}.dec2-go:focus-visible{outline:2px solid #fcd34d;outline-offset:2px}
+.home2{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px}
+.home2 .box{margin:0}
+.chg{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.chg li{display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);gap:8px;align-items:stretch}
+.c-was,.c-will{padding:10px 12px;border-radius:12px;font-size:14px;line-height:1.45}
+.c-was{background:var(--glass2);border:1px solid var(--bd);border-left:4px solid var(--bad);color:var(--text)}
+.c-will{background:var(--tint);border:1px solid var(--bd2);border-left:4px solid var(--ok);color:var(--fg);font-weight:600}
+.c-arr{display:grid;place-items:center;color:var(--lil);font-weight:800;font-size:18px}
+.road{list-style:none;margin:0;padding:0;position:relative}
+.road::before{content:"";position:absolute;left:14px;top:14px;bottom:14px;width:2px;background:var(--bd2)}
+.road li{position:relative;display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;padding:0 0 16px}
+.road li:last-child{padding-bottom:0}
+.road b{display:block;color:var(--fg)}.road div>span{display:block;color:var(--text);font-size:14px}
+.road .cn{position:relative;z-index:1}
+.road li.alt .cn{background:var(--warn);color:var(--pill-warn-fg)}
+@media (max-width:1100px){.home2{grid-template-columns:1fr}}
+@media (max-width:820px){.dec2-nums{grid-template-columns:repeat(3,minmax(0,1fr))}.dec2-go{grid-column:1/-1;margin:12px 20px 16px;justify-self:start}}
+@media (max-width:640px){.dec2-top{padding:22px}.dec2-nums{grid-template-columns:1fr}.dec2-nums div{border-left:0;border-top:1px solid rgba(255,255,255,.18)}.dec2-nums div:first-child{border-top:0}.chg li{grid-template-columns:1fr}.c-arr{transform:rotate(90deg);height:20px}}
+/* итоги: карточка решения */
+.decision{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);border-radius:22px;overflow:hidden;background:var(--side);color:#fff;box-shadow:0 18px 40px var(--shadow)}
+.d-main{padding:30px 32px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.d-tag{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#e0d9ff}
+.d-name{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.12;text-wrap:balance}
+.d-sub{margin:0;color:#e1dcff;font-size:16px;max-width:34rem}
+.d-pill{margin-top:6px;font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:999px;background:var(--pill-warn);color:var(--pill-warn-fg)}
+.d-nums{display:grid;background:rgba(255,255,255,.08);border-left:1px solid rgba(255,255,255,.18)}
+.d-nums div{padding:18px 24px;border-top:1px solid rgba(255,255,255,.18);display:flex;flex-direction:column;justify-content:center}
+.d-nums div:first-child{border-top:0}
+.d-nums b{font-size:26px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.d-nums span{font-size:13px;color:#e1dcff}
+.change{display:grid;gap:10px}
+.ch-row{display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr);align-items:stretch}
+.was,.will{padding:14px 18px;border-radius:14px;color:var(--fg);font-weight:600;font-size:14.5px}
+.was{background:var(--glass);border:1px solid var(--bd);border-left:4px solid var(--bad);color:var(--text);font-weight:500}
+.will{background:var(--tint);border:1px solid var(--bd2);border-left:4px solid var(--ok)}
+.was small,.will small{display:block;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.was small{color:var(--bad)}.will small{color:var(--ok)}
+.arr{display:grid;place-items:center;color:var(--lil);font-size:22px;font-weight:800}
+.conds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.cond{padding:18px;display:flex;gap:12px;align-items:flex-start}
+.cond b{display:block;color:var(--fg);margin-bottom:4px}
+.cond div>span{color:var(--text);font-size:14px;display:block}
+.cn{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff;background:var(--lil)}
+.cond.alt .cn{background:var(--warn);color:var(--pill-warn-fg)}
+@media (max-width:1000px){.decision{grid-template-columns:1fr}.d-nums{grid-template-columns:repeat(3,minmax(0,1fr));border-left:0;border-top:1px solid rgba(255,255,255,.18)}.d-nums div{border-top:0;border-left:1px solid rgba(255,255,255,.18)}.d-nums div:first-child{border-left:0}.conds{grid-template-columns:1fr}}
+@media (max-width:640px){.d-main{padding:22px}.d-name{font-size:26px}.d-nums{grid-template-columns:1fr}.d-nums div{border-left:0;border-top:1px solid rgba(255,255,255,.18)}.ch-row{grid-template-columns:1fr}.arr{transform:rotate(90deg);height:28px}}
+/* итоги: рейтинг */
+.rank{list-style:none;margin:0;padding:0;display:grid}
+.rank li{display:grid;grid-template-columns:30px minmax(0,1.1fr) 8.5rem minmax(0,2fr);gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--bd)}
+.rank li:first-child{border-top:0;padding-top:0}
+.rank .pr{width:30px;height:30px}
+.rank b{color:var(--fg)}
+.rank .p{font-weight:800;font-variant-numeric:tabular-nums;color:var(--fg);white-space:nowrap}
+.rank .vd{color:var(--text);font-size:14px}
+.rank li.top{background:var(--tint);border-radius:12px;padding:12px;margin-bottom:4px;border-top:0}
+.rank li.top+li{border-top:0}
+/* боковая навигация всегда слева */
+@media (max-width:1000px){
+ .app{grid-template-columns:220px minmax(0,1fr)}
+ aside{padding:22px 10px}
+ .brand{padding:0 6px 20px}.brand .sub{display:none}
+ .nav{padding:9px 10px;font-size:14px;white-space:normal;line-height:1.3}
+ main{padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px))}
+ .rank li{grid-template-columns:30px minmax(0,1fr) auto}.rank .vd{grid-column:2/-1}
+}
+@media (max-width:820px){
+ h1{font-size:30px}.two,.flow{grid-template-columns:1fr}
+ .bar,.axis{grid-template-columns:minmax(0,1fr) auto}.bar .track{grid-column:1/-1;grid-row:2}.axis{display:none}
+}
+@media (max-width:640px){
+ .app{grid-template-columns:60px minmax(0,1fr)}
+ aside{padding:14px 8px;padding-left:max(8px,env(safe-area-inset-left,0px));align-items:center}
+ .brand,.foot,.nav .tx{display:none}
+ .nav{width:44px;height:44px;padding:0;justify-content:center}
+ main{padding-block:26px 56px;padding-left:16px;padding-right:max(16px,env(safe-area-inset-right,0px))}
+}
+@media (max-width:520px){.roles,.kpi,.facts4,.facts6,.stats{grid-template-columns:1fr}.verdict{flex-direction:column;gap:2px}}
+</style>
+</head>
+<body>
+
+
+<div class="app">
+<aside>
+  <div class="brand"><div class="logo">CRM</div><div><div class="t">Выбор CRM</div><div class="k sub">Ноябрь 2026</div></div></div>
+  <button class="nav" data-v="home" title="Итоги"><span class="ic"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span><span class="tx">Итоги</span></button>
+  <button class="nav" data-v="services" title="Сервисы"><span class="ic">1</span><span class="tx">Сервисы</span></button>
+  <button class="nav" data-v="compare" title="Сравнение"><span class="ic">2</span><span class="tx">Сравнение</span></button>
+  <button class="nav" data-v="plan" title="Перед решением"><span class="ic">3</span><span class="tx">Перед решением</span></button>
+  <button class="nav" data-v="src" title="Источники"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/></svg></span><span class="tx">Источники</span></button>
+  <div class="foot" id="foot">
+    <span class="fl0">Подготовила</span>
+    <b>Канаева Любовь</b>
+    <span>+7 (933) 302-64-56</span>
+    <span>lubancho@mail.ru</span>
+    <span>Telegram: @lubancho</span>
+  </div>
+  <button class="nav ctc" id="ctcBtn" type="button" title="Контакты" aria-controls="foot" aria-expanded="false"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span></button>
+</aside>
+<main>
+
+<!-- ИТОГИ -->
+<section class="view" id="v-home">
+  <div class="eyebrow"><span class="dot" style="background:var(--vio)"></span>Решение</div>
+
+  <div class="dec2">
+    <div class="dec2-top">
+      <div class="dec2-txt">
+        <span class="d-tag">Рекомендуем</span>
+        <div class="d-name">Битрикс24 «Базовый» + BitrixGPT</div>
+        <p class="d-sub">Планёрка, конспект и задачи команды в одной системе. ИИ сам собирает итоги созвона, задачи ставятся из чата, сроки контролируются.</p>
+      </div>
+      <span class="d-pill">Окончательно — после пилота</span>
+    </div>
+    <div class="dec2-nums">
+      <div><b>3 490 ₽</b><span>в месяц на всю команду</span></div>
+      <div><b>5 мест</b><span>команда и руководитель</span></div>
+      <div><b>2 недели</b><span>пилот перед покупкой</span></div>
+      <button type="button" class="dec2-go" data-v="services">Разбор сервиса <span aria-hidden="true">→</span></button>
+    </div>
+  </div>
+
+  <div class="home2">
+    <div class="box glass">
+      <div class="l2">Что изменится</div>
+      <ul class="chg">
+        <li><span class="c-was">Задачи записывает каждый сам, в блокноте</span><span class="c-arr" aria-hidden="true">→</span><span class="c-will">Все задачи в одной системе, с исполнителем и сроком</span></li>
+        <li><span class="c-was">Протокола планёрки нет, договорённости теряются</span><span class="c-arr" aria-hidden="true">→</span><span class="c-will">После созвона ИИ присылает итоги, договорённости и расшифровку</span></li>
+        <li><span class="c-was">Статус задач никто не видит</span><span class="c-arr" aria-hidden="true">→</span><span class="c-will">Руководитель видит сроки и просрочки в любой момент</span></li>
+      </ul>
+    </div>
+    <div class="box glass">
+      <div class="l2">Условия решения</div>
+      <ol class="road">
+        <li><span class="cn">1</span><div><b>Подтвердить у Битрикс24</b><span>Есть ли роботы на «Базовом», включён ли НДС и как настроить уведомления о задачах в MAX</span></div></li>
+        <li><span class="cn">2</span><div><b>Пройти пилот</b><span>У 100% задач с планёрки есть исполнитель и срок, ≥ 80% договорённостей без правок</span></div></li>
+        <li class="alt"><span class="cn">3</span><div><b>Если пилот не пройдёт</b><span>Рассмотреть Квант: тоже заявляет конспект встреч с постановкой задач и контроль исполнения; бесплатный тариф или «Продвинутый» от 3 990 ₽ в месяц при оплате за год</span></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- СЕРВИСЫ -->
+<section class="view" id="v-services">
+  <div class="eyebrow">Блок 1 · варианты</div>
+  <h1>Пять <em>сервисов</em></h1>
+  <p class="lead">Выберите сервис — откроется его разбор: что это, ключевые цифры, плюсы, минусы и вывод.</p>
+  <div class="rule"></div>
+  <div class="tabs" id="svcTabs" role="tablist" aria-label="Сервисы"></div>
+  <div id="svcList"></div>
+</section>
+
+<!-- СРАВНЕНИЕ -->
+<section class="view" id="v-compare">
+  <div class="eyebrow">Блок 2 · сравнение</div>
+  <h1>Кто что <em>закрывает</em></h1>
+  <p class="lead">Критерии взяты из задания: конспект встреч, постановка задач, контроль статусов, автоматизация, число участников и стоимость. Наведите на ячейку — появится пояснение.</p>
+  <div class="rule"></div>
+  <div class="mxctl glass">
+    <div class="rng">
+      <label for="ppl">Сотрудников в системе</label>
+      <div class="rngrow"><input type="range" id="ppl" min="1" max="30" value="5" step="1"><output id="pplV" for="ppl">5</output></div>
+    </div>
+    <div class="lg"><span><i class="ico g"></i>есть</span><span><i class="ico w"></i>частично или уточнить</span><span><i class="ico b"></i>нет</span></div>
+  </div>
+  <div class="ttpick" id="ttPick" role="group" aria-label="Сервис"></div>
+  <div class="tt glass" id="hm"></div>
+  <div class="htip" id="htip" role="tooltip" hidden><div class="ht-top"><b id="htS"></b><span id="htP"></span></div><div class="ht-k" id="htK"></div><p id="htT"></p></div>
+</section>
+
+<!-- ПЛАН -->
+<section class="view" id="v-plan">
+  <div class="eyebrow">Блок 3 · перед рекомендацией</div>
+  <h1>Как проверю <em>выбор</em></h1>
+  <p class="lead">Восемь шагов за четыре недели. В конце — условия, при которых рекомендую сервис руководителю.</p>
+  <div class="rule"></div>
+  <div class="gn glass">
+    <div class="gn-h">
+      <div><b>План на 4 недели</b><span>Нажмите на полоску шага — откроется описание и статус</span></div>
+      <div class="gn-prog"><span id="gnTxt">Сделано 0 из 8</span><div class="pbar"><i id="progBar"></i></div><button type="button" class="preset" id="pReset">Сбросить</button></div>
+    </div>
+    <div class="gn-grid" id="gnGrid"></div>
+    <div class="gn-lg"><span><i class="sw s0"></i>Понять процесс</span><span><i class="sw s1"></i>Проверить на деле</span><span><i class="sw s2"></i>Решить и запустить</span><span><i class="sw doing"></i>в работе</span><span><i class="sw done"></i>готово</span></div>
+  </div>
+  <div class="finish glass">
+    <div class="fin-h"><span class="flag" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg></span><div><b>Финиш: решение «да», если на пилоте</b><span>Проверяем на шаге 5 и показываем руководителю на шаге 8</span></div></div>
+    <div class="fin-l">
+      <div><b>100%</b><span>задач с планёрки имеют исполнителя и срок</span></div>
+      <div><b>≥ 80%</b><span>договорённостей из конспекта стали задачами без правок</span></div>
+      <div><b>≤ 5 мин</b><span>на оформление задач после встречи</span></div>
+      <div><b>0</b><span>забытых договорённостей за пилот</span></div>
+    </div>
+  </div>
+  <div class="gpop" id="gpop" role="dialog" aria-label="Шаг" hidden>
+    <button type="button" class="gp-x" id="gpX" aria-label="Закрыть">×</button>
+    <div class="pd-meta" id="pdMeta"></div>
+    <h3 id="pdTitle"></h3>
+    <p id="pdText"></p>
+    <div class="pd-dur" id="pdDur"></div>
+    <div class="pd-st" role="group" aria-label="Статус шага"><button type="button" data-v2="0">Не начато</button><button type="button" data-v2="1">В работе</button><button type="button" data-v2="2">Готово</button></div>
+  </div>
+</section>
+
+<!-- ИСТОЧНИКИ -->
+<section class="view" id="v-src">
+  <div class="eyebrow">Источники</div>
+  <h1>Откуда <em>данные</em></h1>
+  <div class="rule"></div>
+  <div class="srcgrid">
+    <div class="box glass src"><div class="l2">Битрикс24</div><ul class="srcl">
+      <li><a href="https://www.bitrix24.ru/prices/" target="_blank" rel="noopener">Тарифы и цены<span>bitrix24.ru</span></a></li>
+      <li><a href="https://www.bitrix24.ru/apps/subscribe.php" target="_blank" rel="noopener">Цена ИИ-подписки BitrixGPT + Маркетплейс<span>bitrix24.ru</span></a></li>
+      <li><a href="https://helpdesk.bitrix24.ru/open/24481514/" target="_blank" rel="noopener">Follow-up: конспект созвона и задачи из договорённостей<span>helpdesk.bitrix24.ru</span></a></li>
+      <li><a href="https://www.bitrix24.ru/apps/app/pavluk_online.task_max/" target="_blank" rel="noopener">Уведомления о задачах в MAX<span>bitrix24.ru</span></a></li>
+    </ul></div>
+    <div class="box glass src"><div class="l2">Квант</div><ul class="srcl">
+      <li><a href="https://kvant.app/system" target="_blank" rel="noopener">Возможности системы и «Коммуникатор»<span>kvant.app</span></a></li>
+      <li><a href="https://rus-kvant.ru/tarify" target="_blank" rel="noopener">Тарифы<span>rus-kvant.ru</span></a></li>
+    </ul></div>
+    <div class="box glass src"><div class="l2">Мегаплан</div><ul class="srcl">
+      <li><a href="https://megaplan.ru/prices/" target="_blank" rel="noopener">Тарифы и цены<span>megaplan.ru</span></a></li>
+      <li><a href="https://spark.ru/startup/novosti-kompanij/blog/299073/megaplan-zapustil-pryamuyu-integratsiyu-s-messendzherom-max" target="_blank" rel="noopener">Интеграция с MAX<span>spark.ru</span></a></li>
+      <li><a href="https://megaplan.ru/mobile/" target="_blank" rel="noopener">Мобильное приложение<span>megaplan.ru</span></a></li>
+    </ul></div>
+    <div class="box glass src"><div class="l2">YouGile</div><ul class="srcl">
+      <li><a href="https://en.yougile.com/prices" target="_blank" rel="noopener">Цены<span>en.yougile.com</span></a></li>
+      <li><a href="https://help.yougile.com/books/baza-znanii-yougile/page/integraciia-s-telegram" target="_blank" rel="noopener">Интеграция с Telegram<span>help.yougile.com</span></a></li>
+      <li><a href="https://ru.yougile.com/news/kak-upravlyat-rabotoj-komandyi-s-telefona.html" target="_blank" rel="noopener">Мобильное приложение<span>ru.yougile.com</span></a></li>
+    </ul></div>
+    <div class="box glass src"><div class="l2">ПланФикс</div><ul class="srcl">
+      <li><a href="https://planfix.ru/blog/planfix-vs-yandex-tracker-sravnenie/" target="_blank" rel="noopener">Тарифы<span>planfix.ru</span></a></li>
+      <li><a href="https://planfix.com/ru/help/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0_%D1%81_%D0%B1%D0%BE%D1%82%D0%BE%D0%BC_%D0%9F%D0%BB%D0%B0%D0%BD%D0%A4%D0%B8%D0%BA%D1%81%D0%B0_%D0%B4%D0%BB%D1%8F_Telegram" target="_blank" rel="noopener">Бот для Telegram<span>planfix.com</span></a></li>
+      <li><a href="https://planfix.ru/features/" target="_blank" rel="noopener">Возможности системы<span>planfix.ru</span></a></li>
+    </ul></div>
+  </div>
+</section>
+
+</main>
+<button type="button" class="aifab" id="aiFab" aria-expanded="false" aria-controls="aiPanel"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg><span>ИИ-помощник</span></button>
+<div class="aipanel" id="aiPanel" role="dialog" aria-label="ИИ-помощник" hidden>
+  <div class="ai-h"><div><b>ИИ-помощник</b><span>Отвечу по записке и покажу нужный раздел</span></div><button type="button" class="ai-x" id="aiX" aria-label="Закрыть">×</button></div>
+  <div class="ai-msgs" id="aiMsgs"></div>
+  <div class="ai-chips" id="aiChips"></div>
+  <form class="ai-form" id="aiForm"><input id="aiIn" type="text" placeholder="Спросите о решении…" autocomplete="off"><button type="submit" id="aiSend" aria-label="Отправить">↑</button></form>
+</div>
+</div>
+
+<script>
+// Единый формат анализа: одинаковые поля для каждой платформы. src: [подпись, ссылка, тип источника]
+const SVC = [
+  {n:1, cls:'best', tag:'рекомендуем', name:'Битрикс24 + BitrixGPT', tags:['ai','crm','free'],
+   what:'Всё в одном портале: задачи и проекты, мессенджер, видеозвонки, календарь, диск. ИИ-помощник после звонка собирает итоги и предлагает задачи.',
+   rows:[
+     ['Тариф для нас','«Базовый»','5 пользователей, 1 ТБ диска'],
+     ['Цена тарифа','2 490 ₽/мес','за весь портал; 1 990 ₽ при оплате за год'],
+     ['ИИ-подписка','1 000 ₽/мес','BitrixGPT + Маркетплейс; по акции в 2026 году — 500 ₽, без НДС'],
+     ['На 5 человек','3 490 ₽/мес','по акции на ИИ — 2 990 ₽'],
+     ['Участники','5 / 50','Базовый / Стандартный (6 990 ₽); бесплатный — без лимита'],
+     ['Протокол встречи','есть','Follow-up: итоги, договорённости, расшифровка']],
+   fn:['Видеозвонок прямо из рабочего чата, до 300 участников','Follow-up после звонка: итоги, договорённости, краткое и подробное резюме с тайм-кодами, расшифровка','Из договорённостей Follow-up — сразу задача или встреча','Задача из любого сообщения в чате в два клика','Контроль сроков и статусов задач'],
+   ai:[
+     ['Краткая транскрибация созвона','Follow-up присылает в чат итоги и договорённости, в подробном анализе — краткое и подробное резюме с тайм-кодами, аудио и текст расшифровки','Звонок от 1 минуты. Вручную — в пределах бесплатного лимита запросов; автозапуск — по подписке, если в чате 3+ участника'],
+     ['Задача из итогов созвона','Из договорённостей, которые выделил Follow-up, можно сразу создать задачу или встречу','Как назначается исполнитель и срок, в справке не описано — проверить на пилоте'],
+     ['Задача из сообщения в чате созвона','Сообщение → «Ещё» → «Создать задачу». Текст уходит в описание, участники группового чата — наблюдатели, в чат приходит ссылка на задачу','Название, исполнителя и срок заполняет человек'],
+     ['Задача из голосового сообщения','ИИ сам ставит задачу: название по смыслу, исполнитель — кого назвали, срок из сообщения или 5 рабочих дней','Только в мобильном приложении и по подписке; включает администратор'],
+     ['Внешние ИИ-агенты (MCP)','ChatGPT, Yandex AI Studio, n8n, Cursor могут искать, создавать и менять задачи, двигать сделки по стадиям, читать почту','По подписке; доступ включает администратор; агент действует в правах сотрудника и спрашивает подтверждение']],
+   msg:[
+     ['g','Приложение','Есть: iOS, Android, RuStore (4,5★, 1 млн+ скачиваний). Задачи, чаты, видеозвонки; бесплатно'],
+     ['w','MAX','Через приложения Маркетплейса, они входят в ИИ-подписку: о создании и завершении задачи, о просрочке — через роботов'],
+     ['w','Telegram','Через приложения Маркетплейса']],
+   yes:['Закрывает все три проблемы в одном сервисе','Протокол превращается в задачи без переноса','Цена за портал, а не за человека'],
+   no:['Автозапуск Follow-up и ИИ-агенты — только с подпиской','MAX для сотрудников — только уведомления, через приложения','Голосовые задачи — только в мобильном приложении','Перегруженный интерфейс, нужно обучение'],
+   verdict:'Лучший вариант под задачу. Стартовать на «Базовом» с ИИ-подпиской, если команда вырастет или понадобятся роботы, перейти на «Стандартный».',
+   src:[['Цены тарифов','https://www.bitrix24.ru/prices/','офиц.'],['ИИ-подписка','https://www.bitrix24.ru/apps/subscribe.php','офиц.'],['Follow-up','https://helpdesk.bitrix24.ru/open/24481514/','офиц.'],['Задача из сообщения','https://helpdesk.bitrix24.ru/open/22164104/','офиц.'],['Голосовые задачи','https://helpdesk.bitrix24.ru/open/27060998/','офиц.'],['MCP','https://helpdesk.bitrix24.ru/open/26952788/','офиц.']]},
+  {n:2, cls:'ok', tag:'альтернатива', name:'Квант', tags:['ai','free'],
+   what:'Российская система управления компанией: задачи и повторяющиеся задачи, регламенты, календарь с напоминаниями, отчёты и показатели. На сайте заявлен «Коммуникатор»: подключается к встречам, фиксирует договорённости и ставит задачи.',
+   rows:[
+     ['Тариф для нас','«Продвинутый»','добавляет контроль исполнения задач'],
+     ['Цена','998 ₽/польз.','помесячно; 798 ₽ при оплате за год'],
+     ['ИИ-подписка','уточнить','ИИ-помощник заявлен, условия на сайте не описаны'],
+     ['На 5 человек','4 990 ₽/мес','при оплате за год — 3 990 ₽; бесплатно — с лимитами'],
+     ['Участники','без лимита','на всех тарифах, включая бесплатный'],
+     ['Протокол встречи','заявлен','«Коммуникатор» — проверить на демо']],
+   msg:[
+     ['g','Приложение','Есть: iOS и Android. Встроенный диспетчер напоминает о задачах'],
+     ['b','MAX','Готового решения нет, только самостоятельно через вебхуки'],
+     ['w','Telegram','Бот с напоминаниями упоминается в отзывах — подтвердить у разработчика']],
+   yes:['Заявлен протокол встреч с постановкой задач','Бесплатный тариф без лимита пользователей','Регламенты и повторяющиеся задачи'],
+   no:['Как работает «Коммуникатор», на сайте подробно не описано','Молодой продукт, мало независимых отзывов','Готовой интеграции с MAX и Telegram нет'],
+   verdict:'Ближайшая альтернатива по задаче: заявлены конспект встреч, постановка задач и контроль исполнения. Перед выбором — демо «Коммуникатора» на реальной планёрке.',
+   src:[['Квант','https://kvant.app/system','офиц.'],['Тарифы','https://rus-kvant.ru/tarify','офиц.']]},
+  {n:3, cls:'mid', tag:'задачи + процессы', name:'Мегаплан', tags:['crm'],
+   what:'Российская система для задач и проектов: задачи, чаты, видеозвонки, бизнес-процессы. ИИ-протокола встреч нет.',
+   rows:[
+     ['Тариф для нас','«Расширенный»','задачи, проекты, бизнес-процессы'],
+     ['Цена','900 ₽/польз.','помесячно; 630 ₽ при оплате за год'],
+     ['ИИ-подписка','нет','ИИ-протокола встреч в описании нет'],
+     ['На 5 человек','4 500 ₽/мес','при оплате за год — 3 150 ₽'],
+     ['Участники','любое число','лицензии покупаются по одной'],
+     ['Протокол встречи','нет','договорённости вносятся вручную']],
+   msg:[
+     ['w','Приложение','Есть: iOS, Android, RuStore (3,5★, 7 тыс+ скачиваний). Задачи, звонки, напоминания'],
+     ['g','MAX','Встроено с января 2026: уведомления о задачах, комментариях и изменениях в проектах'],
+     ['b','Telegram','Дублирование задач в Telegram не описано']],
+   yes:['Бизнес-процессы для напоминаний и эскалаций','Прямая интеграция с MAX','Скидка 30% при оплате за год'],
+   no:['Нет бесплатного тарифа','Нет ИИ-протокола встреч','Для 5 человек дороже Битрикс24'],
+   verdict:'Сильная система задач со встроенным MAX, но без конспекта встреч и дороже Битрикс24.',
+   src:[['Цены','https://megaplan.ru/prices/','офиц.'],['Мессенджеры','https://megaplan.ru/api-integration/','офиц.']]},
+  {n:4, cls:'mid', tag:'бюджетный', name:'YouGile', tags:['crm','free'],
+   what:'Таск-трекер, где у каждой задачи свой чат. Есть корпоративный мессенджер. ИИ-протокола встреч нет.',
+   rows:[
+     ['Тариф для нас','Облако, бесплатно','все функции без ограничений'],
+     ['Цена','0 ₽','до 10 человек; с 11-го — 594 ₽/польз.'],
+     ['ИИ-подписка','нет','ИИ-протокола встреч нет'],
+     ['На 5 человек','0 ₽/мес','бесплатно'],
+     ['Участники','до 10','бесплатно'],
+     ['Протокол встречи','нет','договорённости вносятся вручную']],
+   msg:[
+     ['g','Приложение','Есть: iOS, Android, AppGallery, RuStore (4,7★, 80 тыс+). Уведомления о назначении, дедлайнах, упоминаниях'],
+     ['b','MAX','Интеграции нет'],
+     ['g','Telegram','Встроено: назначение исполнителя, перемещение задачи, дедлайн']],
+   yes:['Бесплатно со всеми функциями','Задачи ставятся и приходят в Telegram','Обсуждение не теряется — оно внутри задачи'],
+   no:['Нет ИИ-протокола встреч','Нет интеграции с MAX','Задачи из встречи — только вручную'],
+   verdict:'Самый дешёвый вариант с хорошей связкой с Telegram, но без протокола встреч.',
+   src:[['Цены','https://en.yougile.com/prices','офиц.'],['Telegram','https://help.yougile.com/books/baza-znanii-yougile/page/integraciia-s-telegram','офиц.']]},
+  {n:5, cls:'low', tag:'сложный', name:'ПланФикс', tags:['crm','free'],
+   what:'Гибкий конструктор: задачи, проекты, документы. Задачу можно превратить в заявку, отгрузку или счёт. ИИ-протокола встреч нет.',
+   rows:[
+     ['Тариф для нас','«Бесплатный»','базовый функционал'],
+     ['Цена','0 ₽','платные — ≈ 360–610 ₽/польз.'],
+     ['ИИ-подписка','нет','ИИ-протокола встреч нет'],
+     ['На 5 человек','0 ₽/мес','с платным тарифом — ≈ 1 800–3 050 ₽'],
+     ['Участники','до 5','бесплатно'],
+     ['Протокол встречи','нет','договорённости вносятся вручную']],
+   msg:[
+     ['w','Приложение','Есть: iOS и Android, официально — в статусе беты; в RuStore 4,0★, 9 тыс+'],
+     ['w','MAX','Только через сторонние сервисы или API'],
+     ['g','Telegram','Встроено: официальный бот присылает комментарии задачи в чат']],
+   yes:['Подстраивается под любой процесс','Сильная интеграция с Telegram','Удобен для логистики'],
+   no:['Настройка занимает недели','Нет протокола встреч'],
+   verdict:'Мощная система, но для четырёх человек она избыточна, а внедрение займёт много времени.',
+   src:[['Цены','https://planfix.ru/blog/planfix-vs-yandex-tracker-sravnenie/','блог вендора'],['Telegram','https://planfix.com/ru/help/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0_%D1%81_%D0%B1%D0%BE%D1%82%D0%BE%D0%BC_%D0%9F%D0%BB%D0%B0%D0%BD%D0%A4%D0%B8%D0%BA%D1%81%D0%B0_%D0%B4%D0%BB%D1%8F_Telegram','офиц.']]}
+];
+const $ = s => document.querySelector(s);
+const el = (t,c,x) => {const e=document.createElement(t); if(c) e.className=c; if(x!=null) e.textContent=x; return e;};
+SVC.forEach((s,i) => {
+  const t = el('button','tab'); t.type='button'; t.setAttribute('role','tab'); t.dataset.i=i;
+  t.append(el('span','tn',String(s.n)), el('span',null,s.name)); $('#svcTabs').append(t);
+  const c = el('article','svc glass '+s.cls); c.id='svc-'+i; c.setAttribute('role','tabpanel');
+  const h = el('div','svc-h'); h.append(el('h3',null,s.name), el('span','st',s.tag));
+  const f = el('div','facts6');
+  s.rows.forEach(([k,v,d]) => { const b=el('div','f4'); b.append(el('small',null,k), el('b',null,v), el('span',null,d)); f.append(b); });
+  const g = el('div','pm');
+  const list = (cls,title,items) => { const col=el('div','col '+cls); col.append(el('h4',null,title)); const ul=el('ul'); items.forEach(x=>ul.append(el('li',null,x))); col.append(ul); return col; };
+  g.append(list('yes','Плюсы',s.yes), list('no','Минусы',s.no));
+  const v = el('div','verdict'); v.append(el('small',null,'Вывод'), el('span',null,s.verdict));
+  c.append(h, el('p','what',s.what), v, f, g);
+  if (s.ai) {
+    const box = el('div','aibox'); box.append(el('h4',null,'ИИ-функции'));
+    const w = el('div','aiwrap'); const tb0 = el('table','ai stack');
+    const hd = el('tr'); ['Функция','Как работает','Условия'].forEach(x=>hd.append(el('th',null,x))); const th=el('thead'); th.append(hd); tb0.append(th);
+    const tb = el('tbody'); s.ai.forEach(([a,b,cnd]) => { const tr=el('tr'); tr.append(el('th',null,a), el('td',null,b), el('td','cnd',cnd)); tb.append(tr); }); tb0.append(tb);
+    w.append(tb0); box.append(w); c.append(box);
+  }
+  if (s.msg) {
+    const mb = el('div','msgbox'); mb.append(el('h4',null,'Где сотрудник увидит задачу, кроме системы'));
+    const grid = el('div','msggrid');
+    const LV={g:'есть',w:'частично',b:'нет'};
+    s.msg.forEach(([lv,k,t]) => { const d=el('div','mg '+lv); const hd=el('div','mgh'); hd.append(el('small',null,k), el('em',null,LV[lv])); d.append(hd, el('span',null,t)); grid.append(d); });
+    mb.append(grid); c.append(mb);
+  }
+  $('#svcList').append(c);
+});
+function pick(i){
+  document.querySelectorAll('.tab').forEach(t=>{ const on=t.dataset.i==i; t.classList.toggle('on',on); t.setAttribute('aria-selected',on); });
+  document.querySelectorAll('.svc').forEach(c=>c.classList.toggle('on', c.id==='svc-'+i));
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>pick(t.dataset.i)));
+pick(0);
+const fmt = n => Math.round(n).toLocaleString('ru-RU').replace(/ /g,' ');
+// ---- Сравнение: светофор
+const CALC = [
+  {name:'Битрикс24', f:(n)=> n<=5 ? {t:'«Базовый» + ИИ', v:2490+1000} : {t:'«Стандартный» + ИИ', v:6990+3000}},
+  {name:'Квант', f:(n)=>({t:'«Продвинутый»', v:998*n})},
+  {name:'Мегаплан', f:(n)=>({t:'«Расширенный»', v:900*n})},
+  {name:'YouGile', f:(n)=> n<=10 ? {t:'бесплатно до 10 чел.', v:0} : {t:'с 11-го — 594 ₽/чел.', v:(n-10)*594}},
+  {name:'ПланФикс', f:(n)=> n<=5 ? {t:'бесплатно до 5 чел.', v:0} : {t:'платный ≈ 360 ₽/чел.', v:360*n}}
+];
+const HK=['Конспект встреч','Задачи с планёрки','Статусы','Автоматизация','Участники','Приложение','MAX','Telegram'];
+const HV=[
+ ['Закрывает все проблемы из задания в одной системе',[
+  ['g','есть','Follow-up после звонка присылает в чат итоги, договорённости, краткое и подробное резюме с тайм-кодами и расшифровку. Автозапуск — по ИИ-подписке, если в чате 3 и больше участников.'],
+  ['g','в один клик','Из договорённостей Follow-up сразу создаётся задача или встреча. Из любого сообщения чата — «Ещё» → «Создать задачу». Как назначаются исполнитель и срок из итогов — проверить на пилоте.'],
+  ['g','есть','Сроки, статусы и наблюдатели: руководитель видит, что в работе и что просрочено.'],
+  ['w','уточнить','Роботы для напоминаний и эскалаций, по данным партнёров, — со «Стандартного»; подтвердить у Битрикс24.'],
+  ['g','до 5','«Базовый» — до 5 пользователей: команда и руководитель, без запаса. «Стандартный» — до 50.'],
+  ['g','4,5★','iOS, Android, RuStore (4,5★, больше 1 млн скачиваний): задачи, чаты, видеозвонки, push-уведомления.'],
+  ['w','приложения','Через приложения Маркетплейса, они входят в ИИ-подписку: уведомления о создании и завершении задачи, события через роботов. Связь в одну сторону.'],
+  ['w','приложения','Уведомления о задачах — через приложения Маркетплейса.']]],
+ ['Конспект заявлен — проверить на демо',[
+  ['w','заявлен','На сайте заявлен «Коммуникатор»: подключается к встречам, фиксирует договорённости и ставит задачи. Подробного описания нет.'],
+  ['w','заявлено','Постановка задач из встречи заявлена в «Коммуникаторе». Из мессенджеров — только через вебхуки.'],
+  ['g','есть','Задачи, календарь, отчёты и показатели.'],
+  ['g','есть','Повторяющиеся задачи, диспетчер напоминаний, бизнес-процессы, контроль исполнения на «Продвинутом».'],
+  ['g','без лимита','Число сотрудников не ограничено на всех тарифах, включая бесплатный.'],
+  ['g','есть','Приложения для iOS и Android.'],
+  ['b','нет','Готовой интеграции нет; только самостоятельно через вебхуки.'],
+  ['w','уточнить','Бот с напоминаниями упоминается только в отзывах — подтвердить у разработчика.']]],
+ ['Контроль и MAX, но без конспекта',[
+  ['b','нет','ИИ-конспекта встреч нет: договорённости вносятся вручную.'],
+  ['b','вручную','Задачи из встречи ставятся вручную.'],
+  ['g','есть','Сроки, статусы, ответственные, проекты.'],
+  ['g','есть','Бизнес-процессы для напоминаний и эскалаций: 3 на «Расширенном», 15 на «Профессиональном».'],
+  ['g','любое','Лицензии покупаются по одной, на любое число сотрудников.'],
+  ['w','3,5★','iOS, Android, RuStore (3,5★, 7 тыс+ скачиваний).'],
+  ['g','встроено','Прямая интеграция с января 2026: уведомления о задачах, комментариях и изменениях в проектах; до 5 ботов.'],
+  ['b','нет','Уведомления о задачах в Telegram не описаны.']]],
+ ['Бесплатно и Telegram, но без конспекта',[
+  ['b','нет','ИИ-конспекта встреч нет.'],
+  ['b','вручную','Задачи из встречи — вручную. У каждой задачи свой чат, обсуждение не теряется.'],
+  ['g','есть','Канбан-доски, статусы и сроки.'],
+  ['w','частично','Уведомление о дедлайне и скрипты в конфигураторе; готовых эскалаций нет.'],
+  ['g','до 10','До 10 человек бесплатно, с 11-го — 594 ₽ за пользователя.'],
+  ['g','4,7★','iOS, Android, AppGallery, RuStore (4,7★, 80 тыс+).'],
+  ['b','нет','Интеграции с MAX нет.'],
+  ['g','встроено','Официальная интеграция: уведомления о назначении, перемещении задачи и дедлайне; задачу можно поставить через бота.']]],
+ ['Гибкий, но долгий запуск',[
+  ['b','нет','ИИ-конспекта встреч нет.'],
+  ['b','вручную','Задачи из встречи — вручную.'],
+  ['g','есть','Сроки, статусы, планировщики, отчёты.'],
+  ['g','есть','Гибкие процессы, шаблоны и повторяющиеся задачи. Настройка занимает недели.'],
+  ['g','до 5','Бесплатно до 5 человек, платные тарифы — до 250.'],
+  ['w','бета','iOS и Android, официально в статусе беты; в RuStore 4,0★.'],
+  ['w','сторонние','Своей интеграции нет — через сторонние сервисы или API.'],
+  ['g','встроено','Официальный бот @planfix_bot: комментарии задачи приходят в чат, команда /task создаёт задачу.']]]
+];
+const LVT={g:'есть',w:'частично',b:'нет'};
+let calcN=5, hSel=[0,0];
+const HSUB=['задачи теряются без конспекта','сейчас каждый записывает сам','статус не отслеживается','автоматизировать задачи команды','4 сотрудника + руководитель','',''];
+const HGR=[[0,'Проблемы из задания'],[5,'Где сотрудник увидит задачу']];
+let ttSel=0;
+function drawHm(){
+  const h=$('#hm'); h.innerHTML='';
+  const hd=el('div','ttr tthead'); const c0=el('div','ttc0'); c0.append(el('b',null,'Сервис'), el('small',null,'и цена за команду в месяц')); hd.append(c0);
+  CALC.forEach((c,r)=>{ const pr=c.f(calcN); const d=el('div','tth'+(r===0?' rec':'')); d.dataset.c=r;
+    const top=el('div','tth-top'); const nb=el('button','hn',c.name); nb.type='button'; nb.title='Открыть разбор сервиса'; nb.addEventListener('click',()=>{ show('services'); pick(r); });
+    top.append(nb);
+    const pz=el('div','tth-pr'); pz.append(el('b','pz',pr.v===0?'0 ₽':fmt(pr.v)+' ₽'), el('small','tf',pr.t));
+    d.append(top,pz); hd.append(d); });
+  h.append(hd);
+  HK.forEach((k,ki)=>{
+    const gr=HGR.find(g=>g[0]===ki); if(gr){ const g=el('div','ttg'); g.textContent=gr[1]; h.append(g); }
+    const row=el('div','ttr'); const lab=el('div','ttk'); lab.append(el('b',null,k)); if(HSUB[ki]) lab.append(el('small',null,HSUB[ki])); row.append(lab);
+    HV.forEach(([vd,cells],r)=>{ const [lv,sh]=cells[ki];
+      const b=el('button','hcell tcl '+lv+(r===0?' rec':'')); b.type='button'; b.dataset.r=r; b.dataset.k=ki; b.dataset.c=r;
+      b.setAttribute('aria-label',CALC[r].name+', '+k+': '+sh);
+      const v=el('span','hv'); v.append(el('i','ico '+lv)); b.append(v, el('span','ht',sh));
+      b.addEventListener('mouseenter',()=>tip(b)); b.addEventListener('focus',()=>tip(b));
+      b.addEventListener('mouseleave',untip); b.addEventListener('blur',untip);
+      b.addEventListener('click',e=>{ e.stopPropagation(); tip(b,true); });
+      row.append(b); });
+    h.append(row);
+  });
+  const g=el('div','ttg'); g.textContent='Вывод'; h.append(g);
+  const vr=el('div','ttr ttv'); vr.append(el('div','ttk')); vr.lastChild.append(el('b',null,'Итог по сервису'));
+  HV.forEach(([vd],r)=>{ const d=el('div','tvd'+(r===0?' rec':'')); d.dataset.c=r; d.textContent=vd; vr.append(d); });
+  h.append(vr);
+  $('#pplV').textContent=calcN; ttCol(ttSel);
+}
+function ttCol(c){ ttSel=c; document.querySelectorAll('#hm [data-c]').forEach(x=>x.classList.toggle('csel',+x.dataset.c===c)); document.querySelectorAll('.ttb').forEach(x=>x.classList.toggle('on',+x.dataset.c===c)); }
+CALC.forEach((c,r)=>{ const b=el('button','ttb',c.name); b.type='button'; b.dataset.c=r; b.addEventListener('click',()=>ttCol(r)); $('#ttPick').append(b); });
+let tipPinned=false;
+function tip(b,pin){
+  const r=+b.dataset.r, k=+b.dataset.k, [lv,sh,tx]=HV[r][1][k]; hSel=[r,k];
+  $('#htS').textContent=CALC[r].name; $('#htK').textContent=HK[k]; $('#htT').textContent=tx;
+  const pl=$('#htP'); pl.textContent=LVT[lv]; pl.className='hd-pill '+lv;
+  const t=$('#htip'); t.hidden=false; t.className='htip '+lv;
+  const br=b.getBoundingClientRect(), tw=t.offsetWidth, th=t.offsetHeight;
+  let x=br.left+br.width/2-tw/2; x=Math.max(8,Math.min(x,window.innerWidth-tw-8));
+  let y=br.bottom+8; if(y+th>window.innerHeight-8) y=br.top-th-8;
+  t.style.left=x+'px'; t.style.top=Math.max(8,y)+'px';
+  document.querySelectorAll('.hcell').forEach(c=>c.classList.toggle('sel',c===b));
+  if(pin) tipPinned=true;
+}
+function untip(){ if(tipPinned) return; $('#htip').hidden=true; document.querySelectorAll('.hcell.sel').forEach(c=>c.classList.remove('sel')); }
+function drawDet(){ const b=document.querySelector('.hcell[data-r="'+hSel[0]+'"][data-k="'+hSel[1]+'"]'); if(b) setTimeout(()=>tip(b,true),350); }
+document.addEventListener('click',e=>{ if(!e.target.closest('.hcell')&&!e.target.closest('#htip')){ tipPinned=false; untip(); } });
+window.addEventListener('scroll',()=>{ tipPinned=false; untip(); },{passive:true});
+$('#ppl').addEventListener('input',e=>{ calcN=+e.target.value; drawHm(); });
+drawHm();
+// ---- Перед решением: план-график
+const STAGES=[['Понять процесс','Неделя 1'],['Проверить на деле','Недели 2–3'],['Решить и запустить','Неделя 4']];
+const STEPS=[
+ ['Интервью','С руководителем и каждым сотрудником: какие задачи ставятся на планёрках и где теряются.','1–2 дня',0,1,2],
+ ['Аудит инструментов','Мессенджеры, почта, телефония, 1С, таблицы — что нужно связать с системой.','1 день',0,3,3],
+ ['Требования и бюджет','Обязательное и желательное, потолок затрат на год, хранение данных по 152-ФЗ.','1–2 дня',0,4,5],
+ ['Сверка цен','Актуальные тарифы и акции на сайтах и у двух партнёров.','1 день',1,6,6],
+ ['Пилот','3–4 реальные планёрки в Битрикс24 с Follow-up, параллельно демо Кванта.','2 недели',1,6,15],
+ ['Сценарии по ролям','Менеджеры, логист, ассистент проходят свой рабочий день в системе.','в ходе пилота',1,8,15],
+ ['Расчёт на год','Лицензии, ИИ-подписка, внедрение, обучение.','1 день',2,16,16],
+ ['Презентация','Рекомендация с цифрами пилота, рисками, регламентом и планом запуска.','1 встреча',2,17,17]];
+const KEY='crm-gantt', STC=['todo','doing','done'], STT=['не начато','в работе','готово'];
+let stat={}; try{ stat=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){}
+let cur=-1;
+function buildGantt(){
+  const g=$('#gnGrid'); g.innerHTML='';
+  const h=el('div','gr gr-h'); h.append(el('div','gl0','Шаг'));
+  [1,2,3,4].forEach(w=>{ const c=el('div','gw'); const wb=el('b'); wb.append(el('span','wf','Неделя '+w), el('span','ws',w+' нед.')); c.append(wb); const d=el('div','gd'); ['пн','вт','ср','чт','пт'].forEach(x=>d.append(el('span',null,x))); c.append(d); h.append(c); });
+  g.append(h);
+  STEPS.forEach(([t,,dur,sg,a,b],i)=>{
+    const r=el('div','gr'); const l=el('div','gl'); l.append(el('span','gn-n',String(i+1)), el('b',null,t), el('small',null,dur)); r.append(l);
+    const tr=el('div','gt'); for(let k=0;k<20;k++) tr.append(el('i','gc'+(k%5===0?' wk':'')));
+    const bar=el('button','gbar s'+sg+(b-a<3?' short':'')); bar.type='button'; bar.dataset.i=i; bar.style.gridColumn=a+' / '+(b+1);
+    bar.append(el('span','gbt',t), el('span','gbs',''));
+    bar.addEventListener('click',e=>{ e.stopPropagation(); openStep(i,bar); });
+    tr.append(bar); r.append(tr); g.append(r);
+  });
+  const f=el('div','gr gr-f'); f.append(el('div','gl')); const ft=el('div','gt'); for(let k=0;k<20;k++) ft.append(el('i','gc'+(k%5===0?' wk':'')));
+  const ms=el('div','gms'); ms.style.gridColumn='18 / 21'; ms.append(el('span','dia',''), el('b',null,'Решение')); ft.append(ms); f.append(ft); g.append(f);
+}
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(stat)); }catch(e){} }
+function drawPath(){
+  let done=0;
+  document.querySelectorAll('.gbar').forEach(b=>{ const i=+b.dataset.i, v=stat[i]||0; if(v===2) done++; b.classList.remove('todo','doing','done'); b.classList.add(STC[v]); b.classList.toggle('cur',i===cur); b.querySelector('.gbs').textContent=v===2?'✓':v===1?'в работе':''; b.setAttribute('aria-label','Шаг '+(i+1)+': '+STEPS[i][0]+', '+STT[v]); });
+  $('#gnTxt').textContent='Сделано '+done+' из '+STEPS.length; $('#progBar').style.width=(done/STEPS.length*100)+'%';
+  if(cur>=0){ const v=stat[cur]||0; document.querySelectorAll('.pd-st button').forEach(b=>b.classList.toggle('on',+b.dataset.v2===v)); }
+}
+function openStep(i,bar){
+  cur=i; const [t,d,dur,sg]=STEPS[i];
+  $('#pdMeta').textContent='Шаг '+(i+1)+' из 8 · '+STAGES[sg][0]+' · '+STAGES[sg][1];
+  $('#pdTitle').textContent=t; $('#pdText').textContent=d; $('#pdDur').textContent='⏱ '+dur;
+  const p=$('#gpop'); p.hidden=false; drawPath();
+  const br=bar.getBoundingClientRect(), pw=p.offsetWidth, ph=p.offsetHeight;
+  let x=br.left; x=Math.max(8,Math.min(x,window.innerWidth-pw-8));
+  let y=br.bottom+8; if(y+ph>window.innerHeight-8) y=Math.max(8,br.top-ph-8);
+  p.style.left=x+'px'; p.style.top=y+'px';
+}
+function closeStep(){ $('#gpop').hidden=true; cur=-1; drawPath(); }
+document.querySelectorAll('.pd-st button').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); if(cur<0) return; stat[cur]=+b.dataset.v2; save(); drawPath(); }));
+$('#gpX').addEventListener('click',closeStep);
+document.addEventListener('click',e=>{ if(!$('#gpop').hidden && !e.target.closest('#gpop') && !e.target.closest('.gbar')) closeStep(); });
+window.addEventListener('scroll',()=>{ if(!$('#gpop').hidden) closeStep(); },{passive:true});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!$('#gpop').hidden) closeStep(); });
+$('#pReset').addEventListener('click',()=>{ stat={}; try{ localStorage.removeItem(KEY); }catch(e){} drawPath(); });
+buildGantt(); drawPath();
+// подписи колонок для мобильной версии
+document.querySelectorAll('table.stack').forEach(t=>{
+  const hs=[...t.querySelectorAll('thead th')].map(h=>h.textContent);
+  t.querySelectorAll('tbody tr').forEach(tr=>[...tr.children].forEach((c,i)=>{ if(i>0) c.dataset.label=hs[i]||''; }));
+});
+// контакты на телефоне
+$('#ctcBtn').addEventListener('click',e=>{ e.stopPropagation(); const o=$('#foot').classList.toggle('pop'); $('#ctcBtn').setAttribute('aria-expanded',o); });
+document.addEventListener('click',e=>{ if(!e.target.closest('#foot')) { $('#foot').classList.remove('pop'); $('#ctcBtn').setAttribute('aria-expanded',false); } });
+// ---------- ИИ: доступ
+let SAMPLE=null, SAMPLE_TOOLS=false;
+const aiReady=(async()=>{ try{ if(window.claude&&claude.use){ SAMPLE=await claude.use('sample'); if(SAMPLE){ const l=await SAMPLE.limits().catch(()=>null); SAMPLE_TOOLS=!!(l&&l.tools); } } }catch(e){ SAMPLE=null; } aiAvail(); })();
+// ---------- ИИ-помощник
+const SECT={home:'Итоги',services:'Сервисы',compare:'Сравнение',plan:'Перед решением',src:'Источники'};
+function knowledge(){
+  const L=['ЗАДАНИЕ: руководитель хочет внедрить CRM и автоматизировать задачи команды из 4 человек (2 менеджера, логист, ассистент). Сейчас задачи ставятся на планёрках, каждый записывает сам, статус не отслеживается, задачи теряются без конспекта встреч.',
+  'РЕШЕНИЕ: Битрикс24 «Базовый» + подписка BitrixGPT. 3 490 ₽ в месяц на всю команду (5 мест), по акции на ИИ 2 990 ₽. Окончательно — после двухнедельного пилота. Если пилот не пройдёт — рассмотреть Квант.',
+  'УСЛОВИЯ: подтвердить у Битрикс24 роботов на «Базовом», НДС и уведомления в MAX; пилот: 100% задач с исполнителем и сроком, ≥80% договорённостей без правок, ≤5 минут на оформление, 0 забытых.'];
+  SVC.forEach((sv,i)=>{ L.push('СЕРВИС '+sv.name+': '+sv.what+' Вывод: '+sv.verdict+' Цифры: '+sv.rows.map(r=>r[0]+' — '+r[1]+' ('+r[2]+')').join('; ')+'. Плюсы: '+sv.yes.join('; ')+'. Минусы: '+sv.no.join('; ')+'.');
+    if(HV[i]) L.push('СРАВНЕНИЕ '+CALC[i].name+': '+HV[i][1].map((c,k)=>HK[k]+' — '+LVT[c[0]]+': '+c[2]).join(' | ')); });
+  L.push('ПУТЬ ПРОВЕРКИ: '+STEPS.map((x,i)=>(i+1)+'. '+x[0]+' ('+x[2]+') — '+x[1]).join(' '));
+  L.push('РАЗДЕЛЫ СТРАНИЦЫ: home — Итоги (решение, что изменится, условия), services — разбор каждого сервиса, compare — сравнение-светофор и цена на команду, plan — путь проверки и метрики пилота, src — источники.');
+  return L.join('\n');
+}
+const SVC_IDX=n=>{ const t=String(n||'').toLowerCase(); return CALC.findIndex(c=>t.includes(c.name.toLowerCase())||c.name.toLowerCase().includes(t)); };
+const CRIT_IDX=n=>{ const t=String(n||'').toLowerCase(); const m={'конспект':0,'встреч':0,'задач':1,'планёрк':1,'статус':2,'контрол':2,'срок':2,'автомат':3,'напомин':3,'участ':4,'польз':4,'прилож':5,'max':6,'макс':6,'telegram':7,'телеграм':7}; for(const k in m) if(t.includes(k)) return m[k]; return HK.findIndex(h=>h.toLowerCase()===t); };
+function doOpenSection(sec){ if(!SECT[sec]) throw new Error('Нет раздела '+sec); show(sec); return 'Открыт раздел «'+SECT[sec]+'»'; }
+function doOpenService(n){ const i=SVC_IDX(n); if(i<0) throw new Error('Нет сервиса '+n); show('services'); pick(i); return 'Открыт разбор: '+CALC[i].name; }
+function doShowCell(n,c){ const i=SVC_IDX(n), k=CRIT_IDX(c); if(i<0||k<0) throw new Error('Не найдено'); show('compare'); hSel=[i,k]; drawDet(); const b=document.querySelector('.hcell[data-r="'+i+'"][data-k="'+k+'"]'); if(b){ b.scrollIntoView({block:'center',behavior:'smooth'}); b.classList.add('flash'); setTimeout(()=>b.classList.remove('flash'),1600);} return 'Показана ячейка: '+CALC[i].name+' — '+HK[k]; }
+const AI_TOOLS=[
+ {name:'open_section',description:'Открывает раздел страницы. Используй, когда ответ связан с разделом.',inputSchema:{type:'object',properties:{section:{type:'string',enum:['home','services','compare','plan','src']}},required:['section']},execute:i=>doOpenSection(String(i.section))},
+ {name:'open_service',description:'Открывает подробный разбор одного сервиса: Битрикс24, Квант, Мегаплан, YouGile или ПланФикс.',inputSchema:{type:'object',properties:{service:{type:'string'}},required:['service']},execute:i=>doOpenService(i.service)},
+ {name:'show_compare_cell',description:'Открывает сравнение и показывает подсказку с оценкой сервиса по критерию: Конспект встреч, Задачи с планёрки, Статусы, Автоматизация, Участники, Приложение, MAX, Telegram.',inputSchema:{type:'object',properties:{service:{type:'string'},criterion:{type:'string'}},required:['service','criterion']},execute:i=>doShowCell(i.service,i.criterion)}];
+const CHIPS=[
+ {q:'Итог за 30 секунд',a:'Рекомендую Битрикс24 «Базовый» с подпиской BitrixGPT — 3 490 ₽ в месяц на всю команду. Только он закрывает все три проблемы в одной системе: ИИ сам делает конспект планёрки, из договорённостей в один клик ставятся задачи, а сроки и статусы видны руководителю. Окончательное решение — после двухнедельного пилота.',act:()=>doOpenSection('home')},
+ {q:'Почему не Квант?',a:'Квант — ближайшая альтернатива: у него тоже заявлен конспект встреч с постановкой задач. Но как работает «Коммуникатор», на сайте не описано, интеграции с MAX нет, а на 5 человек он дороже — 4 990 ₽ в месяц. Поэтому он запасной вариант: посмотрим его на демо параллельно с пилотом.',act:()=>doShowCell('Квант','Конспект встреч')},
+ {q:'Как задачи попадут в MAX?',a:'Встроенная интеграция с MAX есть только у Мегаплана. В Битрикс24 уведомления о задачах в MAX приходят через приложения Маркетплейса, они входят в ИИ-подписку, — связь в одну сторону. Это пункт для уточнения у менеджера Битрикс24.',act:()=>doShowCell('Битрикс24','MAX')},
+ {q:'Что сделать дальше?',a:'Первый шаг — интервью с руководителем и командой, затем сверка цен и двухнедельный пилот на 3–4 реальных планёрках. Решаем по метрикам: у всех задач с планёрки есть исполнитель и срок, не меньше 80% договорённостей становятся задачами без правок.',act:()=>doOpenSection('plan')}];
+let aiTurns=[], aiCtl=null;
+function addMsg(role,text){ const m=el('div','msg '+role); m.textContent=text; $('#aiMsgs').append(m); $('#aiMsgs').scrollTop=1e6; return m; }
+function aiAvail(){ $('#aiForm').hidden=!SAMPLE; }
+async function ask(q,chip){
+  addMsg('me',q);
+  if(!SAMPLE){ const a=addMsg('bot',chip?chip.a:'ИИ сейчас недоступен. Выберите один из вопросов ниже.'); if(chip) chip.act(); return; }
+  const b=addMsg('bot','Думаю…'); b.classList.add('wait'); aiCtl=new AbortController();
+  aiTurns.push({role:'user',content:q}); $('#aiSend').disabled=true;
+  const RULES='Ты ИИ-помощник на странице аналитической записки о выборе CRM. Отвечай по-русски, коротко: 2–5 предложений, простыми словами, без markdown. Опирайся только на данные ниже; если данных нет — так и скажи. Если ответ связан с разделом, сервисом или оценкой в сравнении — вызови инструмент, чтобы показать это на странице.\n\nДАННЫЕ:\n'+knowledge();
+  try{
+    const opt={cache:false,modelTier:'quick',signal:aiCtl.signal,onText:({text})=>{ b.classList.remove('wait'); b.textContent=text; $('#aiMsgs').scrollTop=1e6; }};
+    if(SAMPLE_TOOLS) opt.tools=AI_TOOLS;
+    const {text}=await SAMPLE([{role:'user',content:RULES},...aiTurns.slice(-8)],opt);
+    aiTurns.push({role:'assistant',content:text}); b.classList.remove('wait'); b.textContent=text.replace(/\*\*/g,'');
+  }catch(e){
+    b.classList.remove('wait');
+    if(e&&e.code==='not_granted'||e&&e.code==='sampling_disabled'){ SAMPLE=null; aiAvail(); b.textContent=chip?chip.a:'Без доступа к ИИ могу ответить на готовые вопросы ниже.'; if(chip) chip.act(); }
+    else if(e&&e.code==='rate_limited') b.textContent='Слишком много вопросов подряд — попробуйте чуть позже.';
+    else if(e&&e.code!=='cancelled') b.textContent=(e.text||'')+(e.text?'':'Не получилось ответить. Попробуйте ещё раз.');
+    aiTurns.pop();
+  }finally{ $('#aiSend').disabled=false; }
+}
+CHIPS.forEach(c=>{ const b=el('button','chipq',c.q); b.type='button'; b.addEventListener('click',()=>ask(c.q,c)); $('#aiChips').append(b); });
+function aiOpen(o){ $('#aiPanel').hidden=!o; $('#aiFab').setAttribute('aria-expanded',o); $('#aiFab').classList.toggle('open',o); $('#aiFab').classList.remove('pulse'); if(o){ if(!$('#aiMsgs').children.length) addMsg('bot','Здравствуйте! Я знаю эту записку: расскажу итог, сравню сервисы и сам открою нужный раздел. Спросите или выберите вопрос.'); setTimeout(()=>{ if(!$('#aiForm').hidden) $('#aiIn').focus(); },50); } }
+$('#aiFab').addEventListener('click',()=>aiOpen($('#aiPanel').hidden));
+$('#aiX').addEventListener('click',()=>aiOpen(false));
+$('#aiForm').addEventListener('submit',e=>{ e.preventDefault(); const q=$('#aiIn').value.trim(); if(!q) return; $('#aiIn').value=''; ask(q,null); });
+$('#aiFab').classList.add('pulse');
+aiAvail();
+const views=['home','services','compare','plan','src'];
+function show(v){
+  if(!views.includes(v)) v='home';
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on', s.id==='v-'+v));
+  document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('on', b.dataset.v===v));
+  try{ if(location.hash.slice(1)!==v) history.replaceState(null,'','#'+v); }catch(e){}
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('[data-v]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.v)));
+window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+show(location.hash.slice(1));
+</script>
+
+</body>
+</html>
